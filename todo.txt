@@ -1,0 +1,28 @@
+when randomly generating item names (use simple methods such as adjectives), we should make sure that item name doesn't exist in the inventory already. 
+This means we need to generate items the moment enemies are killed and not pregenerate them as there's no way to cross compare
+(we need to do this because the item removal removes the first item with the correlated name, so it may delete the wrong item by accident)
+
+someone also has to do the input-ifier. this means that one of us needs to make some sort of input system to:
+    attack a specific enemy:
+        e.g. "attack blue goblin"
+    equip a specific wepon in right or left hand OR should be asked:
+        e.g. 'equip red thorn in right hand'
+        e.g. 'equip red thorn' -> In what hand? (print what's equipped in hands) 'right hand'
+    equip a charm on an armor slot OR on specific armor piece OR should be asked
+        e.g. 'equip blue keychain on helmet'
+        e.g. 'equip blue keychain on golden crown'
+        e.g. 'equip blue keychain' -> On what piece? (print empty slots) 'helmet' or 'golden crown'
+    equip an armor piece:
+        e.g. 'equip golden crown'
+    NOTE: WITH ALL THE EQUIPS, IF THERE'S ALREADY SOMETHING THERE, ASK THE PLAYER IF THEY'RE SURE. 
+    move in a direction:
+        e.g. 'move n' or 'move north'
+        e.g. 'move w'
+        THERE WILL BE A MAXIMUM OF 4 DIRECTIONS BUT NOT ALWAYS
+    loot a specific enemy/location OR should be asked:
+        e.g. 'loot blue goblin'
+        e.g. 'loot floor'
+        e.g. 'loot' -> Where would you like to loot? (give list of all possible loot locations in a room) 'floor'
+what i want you to do with this is just sort the data and make a system to know what to do. for example, if it's to equip an item, just make a comment for where the
+code will go but also parse the data so that the item, location, direction, etc. are all variables that the person coding the equipping can do
+IF YOU CAN i'd appreciate it if you could also do the equipping. you'd have to read my code, but it's not very complicated
