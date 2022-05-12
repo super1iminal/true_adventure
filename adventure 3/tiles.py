@@ -1,18 +1,18 @@
 from random import randint
 
 class Level(object):
-    """Class that represents a level. Generated once per level."""
+    """Class that represents a level/floor"""
     class Tile(object):
         """Class that represents a tile. Generated level + 3 times per level"""
-        def __init__(self, previousDirection = None, previousTile = None, location = ''):
+        def __init__(self, previousDirection = None, previousTile = None, location = '', tiletype = 'Enemy'):
             self.paths = {'n': None, 's': None, 'e': None, 'w': None}
             if previousTile != None and previousDirection!=None:
                 self.paths[Level.Tile.antipath(previousDirection)] = previousTile
 
 
 
-
-            self.enemies = [0]*randint(0,10)
+            if tiletype!='Start':
+                self.enemies = [0]*randint(0,10)
             self.location = location
 
         def __str__(self):
@@ -49,23 +49,19 @@ class Level(object):
 
         @staticmethod
         def antipath(path):
-            paths = [['n', 's'], ['e','w']]
-            if path in paths[0]:
-                paths[0].remove(path)
-                return paths[0][0]
-            if path in paths[1]:
-                paths[1].remove(path)
-                return paths[1][0]
-            else:
-                raise ValueError('No such path exists')
+            for pathpair in [['n', 's'], ['e','w']]:
+                if path in pathpair:
+                    pathpair.remove(path)
+                    return pathpair[0]
+            raise ValueError('No such path exists')
 
             
 
 
     def __init__(self, stage): #stage will start at 1
-        self.center_tile = Level.Tile()
+        self.center_tile = Level.Tile(tiletype = "Start")
         self.stage = stage
-        self.maxdepth = randint(1, int(stage) + 2)
+        self.maxdepth = randint(3, int(stage) + 5)
         self.tiles = 1
         self.locations = []
         #number of iterations around center
@@ -89,7 +85,7 @@ class Level(object):
                             Level.r_generate(self, tile.paths[path], location_next, depth+1)
 
     def find_tile_from_plocation(self, plocation):
-        """Finds a tile from the center from a parsed location"""
+        """Finds a tile from the center using a parsed location"""
         current_tile = self.center_tile
         for direction in plocation:
             if current_tile.paths[direction] != None:
@@ -98,7 +94,7 @@ class Level(object):
                 raise ValueError("There is no tile at that location")
         return current_tile
 
-
+#we know have a level generator that generates a tile map, starting with the center tile and going outwards from there. 
 
 
         

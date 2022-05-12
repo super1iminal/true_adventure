@@ -5,6 +5,7 @@ class Items(object):
 
 
 class Consumables(Items):
+    itemtype = 'Consumable'
     def __init__(self, itemname = "Consumable", itemsize = 'Small', instant_hp = 0, buff_type = None, buff_amount = 0):
         self.heal = instant_hp
         self.buff = (buff_type, buff_amount)
@@ -21,11 +22,16 @@ class Consumables(Items):
 
 
 class Armor(Items):
-    def __init__(self, equipslot = "Torso", itemname = 'Armor', stage = 1):
+    itemtype = 'Armor'
+    def __init__(self, equipslot = "Torso", itemname = 'Armor', stage = 1, resistance = None, charmslots = None):
         from math import exp
         from random import randint
-        self.resistance = randint(0, int(stage)+1)
-        self.charmslots = randint(0, round(6/(1+exp((-(1/2)*stage)+2)))) #1 at 1, 2 at 4, 3 at 6, maxes out at 6
+        if resistance == None and charmslots == None:
+            self.resistance = randint(0, int(stage)+1)
+            self.charmslots = randint(0, round(6/(1+exp((-(1/2)*stage)+2)))) #1 at 1, 2 at 4, 3 at 6, maxes out at 6
+        else:
+            self.resistance = resistance
+            self.charmslots = charmslots
         self.charms = ()
         self.name = itemname
         self.level = stage
@@ -55,19 +61,19 @@ class Armor(Items):
                 return charm
 
 
-class Backpack(Armor):
-    def __init__(self, equipslot = 'Back', itemname = 'Backpack', stage = 1):
+class Backpack(Items):
+    itemtype = 'Backpack'
+    def __init__(self, itemname = 'Backpack', stage = 1, starteritem = None):
         from random import randint
         from math import exp
-        super().__init__(equipslot, itemname, stage)
+        self.name = itemname
         self.size = randint(round(30/(1+exp((-(1/5)*stage)+2))), round(30/(1+exp((-(1/3)*stage)+2)))) #number between blah and blah, inclusive
-        self.binventory = ()
+        self.binventory = tuple()
+        if starteritem:
+            self.binventory = tuple(list(self.binventory).append(starteritem))
     
     def add_item(self, item):
-        if len(self.binventory) < self.size:
-            self.binventory = tuple(list(self.binventory).append(item))
-        else:
-            raise ValueError('Binventory overflow')
+        self.binventory = tuple(list(self.binventory).append(item))
 
     def remove_item(self, itemname): 
         if len(self.binventory) == 0:
@@ -76,6 +82,12 @@ class Backpack(Armor):
             if item.name.lower() == itemname.lower():
                 self.binventory = tuple(list(self.binventory).remove(item))
                 return item
+
+    def is_over(self):
+        if len(self.binventory) > self.size:
+            return True
+        else:
+            return False
     
     def __str__(self):
         rep = "| {} | Slot: {} | Charmslots: {} | Resistance: {} |"
@@ -92,6 +104,7 @@ class Backpack(Armor):
 
 
 class Charm(Items):
+    itemtype = 'Charm'
     def __init__(self, itemname = "Charm", buff_type = None, stage = 1):
         from random import randint
         from math import exp
@@ -103,11 +116,16 @@ class Charm(Items):
         return "| {} | Buff: {} | Buff Strength: {} |".format(self.name, self.buff[0], self.buff[1])
         
 class Weapon(Items):
-    def __init__(self, itemname = "Weapon", stage = 1):
+    itemtype = 'Weapon'
+    def __init__(self, itemname = "Weapon", stage = 1, damage = None):
         from random import randint
         from math import exp
         self.name = itemname
-        self.damage = randint((30/(1+exp((-(1/5)*stage)))), (30/(1+exp((-(1/4)*stage)+2))))
+        if damage == None:
+            self.damage = randint((30/(1+exp((-(1/5)*stage)))), (30/(1+exp((-(1/4)*stage)+2))))
+        else:
+            self.damage = damage
+        self.equipslot = 'Hands'
 
     def __str__(self):
         return "| {} | Damage: {} |".format(self.name, self.damage)

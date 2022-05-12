@@ -1,0 +1,8 @@
+head
+Crown-Baseball Cap-Batting Helmet-Beanie-Beaver Hat-Beret-Tuque-Boonie Hat-Bucket Hat-Bicycle Helmet-Kettle Hat-Burgonet-Cervelliere-Enclosed Helmet-Armet-Bascinet-Military Helmet
+chest
+TShirt-Long Sleeve Shirt-Knitted Sweater-Toilet Paper Chestpiece-Military Chest Armor-Metal Plate
+arms
+Gauntlets-Gloves-Wristband
+legs
+Leggings-Denim Jeans-Joggers-Plate Leg Armor-Underwear-Swimsuit-Towel
