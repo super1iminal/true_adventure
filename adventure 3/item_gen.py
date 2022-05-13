@@ -1,6 +1,5 @@
-from random import randint
-
 def adjective_gen():
+    from random import randint
     adjectives = ''
     adj = open ('words/adjectives.txt')
     adjective1 = adj.readline().strip().split()
@@ -13,15 +12,14 @@ def adjective_gen():
     return adjectives
 
 def weapon_gen():
+    from random import randint
     weapon_name = ''
     weapon = open('words/weapons.txt')
     weap = weapon.readline().strip('\n').split('-')
     adjectives = adjective_gen()
-    if randint(0,1) == 1:
-        weapon_name += adjectives
-        weapon_name += weap[randint(0, len(weap)-1)]
+    weapon_name += adjectives
+    weapon_name += weap[randint(0, len(weap)-1)]
 
-adjective_gen()
 
 #def armor_gen():
     
