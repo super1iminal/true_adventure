@@ -27,8 +27,8 @@ class Armor(Items):
         from math import exp
         from random import randint
         if resistance == None and charmslots == None:
-            self.resistance = randint(0, int(stage)+1)
-            self.charmslots = randint(0, round(6/(1+exp((-(1/2)*stage)+2)))) #1 at 1, 2 at 4, 3 at 6, maxes out at 6
+            self.resistance = randint(1, stage + 5)
+            self.charmslots = randint(stage + 1) #1 at 1, 2 at 4, 3 at 6, maxes out at 6
         else:
             self.resistance = resistance
             self.charmslots = charmslots
@@ -67,7 +67,7 @@ class Backpack(Items):
         from random import randint
         from math import exp
         self.name = itemname
-        self.size = randint(round(30/(1+exp((-(1/5)*stage)+2))), round(30/(1+exp((-(1/3)*stage)+2)))) #number between blah and blah, inclusive
+        self.size = randint(1, stage+5) #number between blah and blah, inclusive
         self.binventory = tuple()
         if starteritem:
             self.binventory = tuple(list(self.binventory).append(starteritem))
@@ -109,7 +109,7 @@ class Charm(Items):
         from random import randint
         from math import exp
         self.name = itemname
-        buff_strength = randint(1, round(6/(1+exp((-(1/2)*stage)+2))))
+        buff_strength = randint(1, stage+5)
         self.buff = (buff_type, buff_strength)
 
     def __str__(self):
@@ -117,12 +117,12 @@ class Charm(Items):
         
 class Weapon(Items):
     itemtype = 'Weapon'
-    def __init__(self, itemname = "Weapon", stage = 1, damage = None):
+    def __init__(self, itemname = "Weapon", stage = 5, damage = None):
         from random import randint
         from math import exp
         self.name = itemname
         if damage == None:
-            self.damage = randint(round((30/(1+exp((-(1/5)*stage))))), round((30/(1+exp((-(1/4)*stage)+2)))))
+            self.damage = randint(1,stage+5)
         else:
             self.damage = damage
         self.equipslot = 'Hands'
