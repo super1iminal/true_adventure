@@ -1,7 +1,5 @@
 from random import randint
-from tracemalloc import start
 
-from numpy import tile
 
 class Level(object):
     """Class that represents a level/floor"""
