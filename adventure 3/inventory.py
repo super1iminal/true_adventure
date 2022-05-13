@@ -16,7 +16,7 @@ class Inventory(object):
                     armornames[location] = self.equipped[itemtype][location].name
         return {'Armor': armornames, 'Wepons': weaponnames}
 
-    def _unequip(self, itemname = None, item_location = None):
+    def unequip(self, itemname = None, item_location = None):
         if itemname == None and location == None:
             raise ValueError("No location/item specified to uneequip")
         elif itemname!= None:
@@ -42,7 +42,7 @@ class Inventory(object):
                             raise ValueError('There is no item equipped there')
             raise ValueError('Invalid location')
 
-    def _equip(self, itemname = None,):
+    def equip(self, itemname = None,):
         if itemname == None:
             raise ValueError('No item name specified to equip')
         item = self.backpack.remove_item(itemname)

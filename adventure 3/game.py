@@ -1,6 +1,7 @@
 from items import *
 from player import *
 from inventory import *
+from tiles import *
 
 
 #here is where you'll get all the inputs and interpret them
@@ -12,7 +13,19 @@ gamer = Player()
 
 
 mcommands = ["move", "equip", "attack", "loot", "HELP"] #main commands
+directions = ('n', 's', 'w', 'e')
+
+level = Level(1)
+current_tile = level.center_tile
+
 while True:
+    
+    print(current_tile)
+    for path in current_tile.paths:
+        if current_tile.paths[path]!=None:
+            print(path, current_tile.paths[path])
+            
+
     action = input("\nWhat would you like to do? ") 
 
     action_s = action.split()
@@ -52,30 +65,40 @@ while True:
 
 
     if action_s[0] == "move":
-        if gamer.inventory.backpack.isover():
+        if gamer.inventory.backpack.is_over():
             print("You are too heavy to move, empty some of your inventory")
             continue
-    
-
-
-
-        if action == "move": 
-            dir = input("In which direction do you move? ")
-            if dir in ["n","e","s","w"]:
-                continue
-                #EXECUTE MOMEMENT IN GIVEN DIRECTION NEED CODE
-                
-                
-            else: 
-                print("Invalid direction")
-                continue
         
-        if action_s[1] in ["n","e","s","w"]:
-            pass#EXECUTE MOVEMENT IN GIVEN DIRECTION NEED CODE
+
+    
+        if action == "move": 
+
+            dir = input("In which direction do you move? ")
+            if dir in directions:
+                if current_tile.paths[dir]!=None:
+                    current_tile = current_tile.paths[dir]
+                    continue
+                else:
+                    print("You can't go that way!")
+                    continue
+
+        
+        if action_s[1] in directions:
+            if current_tile.paths[action_s[1]]!=None:
+                    current_tile = current_tile.paths[action_s[1]]
+                    continue
+            else:
+                print("You can't go that way!")
+                continue
+           
                
         else:
             print("Invalid direction")
             continue
+
+
+
+
 
 
 
