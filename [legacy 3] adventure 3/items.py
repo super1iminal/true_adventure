@@ -68,19 +68,19 @@ class Backpack(Items):
         from math import exp
         self.name = itemname
         self.size = randint(1, stage+5) #number between blah and blah, inclusive
-        self.binventory = list()
+        self.binventory = tuple()
         if starteritem:
-            self.binventory = self.binventory + [starteritem]
+            self.binventory = tuple(list(self.binventory).append(starteritem))
     
     def add_item(self, item):
-        self.binventory += [item]
+        self.binventory = tuple(list(self.binventory).append(item))
 
     def remove_item(self, itemname): 
         if len(self.binventory) == 0:
             raise ValueError('Binventory underflow')
         for item in self.binventory:
             if item.name.lower() == itemname.lower():
-                self.binventory.remove(item)
+                self.binventory = tuple(list(self.binventory).remove(item))
                 return item
 
     def is_over(self):
