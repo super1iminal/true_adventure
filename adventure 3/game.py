@@ -100,9 +100,6 @@ while True:
 
 
 
-
-
-
     if action_s[0] == "loot":
         if action == "loot":
             print("x") #CODE TO LIST ALL POSSIBLE LOOTABLE THINGS
