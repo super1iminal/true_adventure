@@ -8,7 +8,8 @@ from inventory import *
 print("\nWelcome to our ADVENTURE GAME")
 print("PROCEED WITH CAUTION ( ͡° ͜ʖ ͡°)")
 print("\nyell HELP quick instructions!")
-player1 = Player()
+gamer = Player()
+
 
 mcommands = ["move", "equip", "attack", "loot", "HELP"] #main commands
 while True:
@@ -51,11 +52,10 @@ while True:
 
 
     if action_s[0] == "move":
-        '''
-        if player1.inventory.backpack.isover():
+        if gamer.inventory.backpack.isover():
             print("You are too heavy to move, empty some of your inventory")
             continue
-        '''
+    
 
 
 
