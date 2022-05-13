@@ -5,7 +5,7 @@ class Level(object):
     """Class that represents a level/floor"""
     class Tile(object):
         """Class that represents a tile. Generated level + 3 times per level"""
-        def __init__(self, direction_from_previous = None, previousTile = None, location = '', tiletype = 'Enemy'):
+        def __init__(self, direction_from_previous = None, previousTile = None, location = '', pathto = '', tiletype = 'Enemy'):
             self.tiletype = tiletype
             self.paths = {'n': None, 's': None, 'e': None, 'w': None}
             if direction_from_previous!=None:
@@ -20,7 +20,10 @@ class Level(object):
                 self.enemies = [0]*randint(0,10)
             else:
                 self.enemies = list()
+            
+            #LOCATIONS
             self.location = location
+            self.pathto = pathto
         def __str__(self): #works
             if self.tiletype == 'Start':
                 rep = "| Location: Start "
@@ -29,12 +32,11 @@ class Level(object):
                 rep += "Enemies: "
                 for enemy in self.enemies:
                     rep += (str(enemy) + ", ")
-            rep += "| "
-            rep += 'Paths: '
+            rep += "| Paths: "
             for path in self.paths:
                 if self.paths[path]!=None:
                     rep += (path + ', ')
-            rep += "| "
+            rep += "| PathTo: {}".format(self.pathto)
 
             return rep
         def __add__(self, other):
@@ -68,7 +70,7 @@ class Level(object):
         self.center_tile = Level.Tile(tiletype = "Start")
         self.stage = stage
         self.maxdepth = 3
-        self.tiles = 1
+        self.n_tiles = 1
         self.locations = ['',]
         self.r_generate()
         #number of iterations around center
@@ -77,7 +79,8 @@ class Level(object):
         #basically, I need this to go through every tile recursively
         # this is like a virus, if a tile has already been 'infected' (visited), then skip it. the problem is, i need a central data storage,
         # here it's visited locations, to store the data of where the virus has been
-        """        
+        return str(self.n_tiles)
+        """      
         def all_visited(tile, v_locations):
             v_counter = 0
             for path in tile.paths:
@@ -86,8 +89,6 @@ class Level(object):
             if v_counter == 4:
                 return True
             else: return False
-
-        """
         repre = ''
         visited_locations = ['',]
         def strHelper(tile):
@@ -99,7 +100,7 @@ class Level(object):
                     visited_locations += [Level.Tile.locationparser(tile.location + path)] #adding location of tile currently about to expand into to repetoire
                     strHelper(tile.paths[path])
         strHelper(self.center_tile)
-        return repre
+        return repre"""
         
 
     @staticmethod
@@ -127,10 +128,10 @@ class Level(object):
             
     def r_generate(self):
         startingTile = self.center_tile
-        startingLocation = self.center_tile.location
+        startingLocation = ''
         startingDepth = 0
         maxDepth = self.maxdepth
-        def _r_generate(tile, location, depth):
+        def _r_generate(tile, depth):
             nonlocal maxDepth
             if depth == maxDepth:
                 print('Max Depth Reached. Returning')
@@ -139,26 +140,29 @@ class Level(object):
                 print("Generating...")
                 for path in tile.paths:
                     if tile.paths[path] == None and randint(0,1) == 1:
-                        location_next = Level.Tile.locationparser(location + path) #staticmethod so valid
+                        location_next = Level.Tile.locationparser(tile.location + path) #staticmethod so valid
+                        path_next = tile.pathto + path
                         if location_next in self.locations:
                             existing_tile = self.center_tile
-                            for direction in location_next:
+                            for direction in path_next:
                                 if existing_tile.paths[direction] != None:
                                     existing_tile = existing_tile.paths[direction]
-                            tile.paths[path] = existing_tile
-                            existing_tile.paths[Level.Tile.antipath(path)] = tile #staticmethod so valid
+                            if existing_tile.location == location_next:
+                                tile.paths[path] = existing_tile
+                                existing_tile.paths[Level.Tile.antipath(path)] = tile #staticmethod so valid
+                            else:
+                                print('Mismatched existing tile location and location next')
                         else:
                             self.locations += location_next
-                            self.tiles += 1 #counting tiles
-                            tile.paths[path] = Level.Tile(path, tile, location_next)
-                            _r_generate(tile.paths[path], location_next, depth+1)
+                            self.n_tiles += 1 #counting tiles
+                            tile.paths[path] = Level.Tile(path, tile, location_next, path_next)
+                            _r_generate(tile.paths[path], depth+1)
 
-        _r_generate(startingTile, startingLocation, startingDepth)
+        _r_generate(startingTile, startingDepth)
 
     @staticmethod
     def tile_from_direction(tile, direction):
         return tile.paths[direction]
-
 
 
 

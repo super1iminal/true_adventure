@@ -3,7 +3,6 @@ from tiles import *
 def Explore():
     level = Level(1)
     current_tile = level.center_tile
-    command = 'asd'
     commands = ('n', 's', 'w', 'e')
     while True:
         print(current_tile)
