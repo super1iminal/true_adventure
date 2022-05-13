@@ -5,7 +5,7 @@ print("\nWelcome to our ADVENTURE GAME")
 print("PROCEED WITH CAUTION ( ͡° ͜ʖ ͡°)")
 print("\nyell HELP quick instructions!")
  
-mcommands = ["move", "equip", "attack", "loot"] #main commands
+mcommands = ["move", "equip", "attack", "loot", "HELP"] #main commands
 while True:
     action = input("\nWhat would you like to do? ") 
 
@@ -52,7 +52,9 @@ while True:
         if action == "move": 
             dir = input("In which direction do you move? ")
             if dir in ["n","e","s","w"]:
-                pass#EXECUTE MOMEMENT IN GIVEN DIRECTION NEED CODE
+                continue
+                #EXECUTE MOMEMENT IN GIVEN DIRECTION NEED CODE
+                
                 
             else: 
                 print("Invalid direction")
@@ -99,8 +101,28 @@ while True:
             equipc = input("What would you like to equip? ")
             #CHECK IF INPUT IS VALID
             print("y") #LIST ALL EQUIPABLE LOCATIONS
-            equipl = input("Where do you equip", equipc, "? ")
+            equipl = input("Where do you equip it? ")
             #CHECK IF INPUT IS VALID THEN EXCUTE EQUIP ACTION
+            continue
+
+        if "on" in action_s[1:]:
+            onindex = action_s.index("on")
+            equipc = " ".join(action_s[1:onindex])
+            equipl = " ".join(action_s[onindex+1:])
+            #VERIFY BOTH INPUTS ARE VALID THEN EXECUTE
+            continue
+        else:
+            equipc = " ".join(action_s[1:onindex])
+            #VERIFY EQUIP CHOICE IS VALID
+            print("y") #LIST ALL EQUIPABLE LOCATIONS
+            equipl = input("Where do you equip it? ")
+            #CHECK IF INPUT IS VALID THEN EXCUTE EQUIP ACTION
+            continue
+
+
+    
+
+
 
 
 
