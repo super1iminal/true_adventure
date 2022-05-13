@@ -69,7 +69,7 @@ class Level(object):
         self.stage = stage
         self.maxdepth = 3
         self.tiles = 1
-        self.locations = []
+        self.locations = ['',]
         self.r_generate()
         #number of iterations around center
 

@@ -122,7 +122,7 @@ class Weapon(Items):
         from math import exp
         self.name = itemname
         if damage == None:
-            self.damage = randint((30/(1+exp((-(1/5)*stage)))), (30/(1+exp((-(1/4)*stage)+2))))
+            self.damage = randint(round((30/(1+exp((-(1/5)*stage))))), round((30/(1+exp((-(1/4)*stage)+2)))))
         else:
             self.damage = damage
         self.equipslot = 'Hands'
