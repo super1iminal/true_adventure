@@ -6,7 +6,8 @@ def adjective_gen():
     adjective1 = adj.readline().strip().split()
     if randint(0,1) == 1:
         adjectives += adjective1[randint(0, len(adjective1)-1)]
-    else:
+    adjective2 = adj.readline().strip().split()
+    if randint(0,1) == 1:
         adjectives += adjective2[randint(0, len(adjective2)-1)]
     adj.close()
     return adjectives
