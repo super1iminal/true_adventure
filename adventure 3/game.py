@@ -3,12 +3,27 @@
 
 print("\nWelcome to our ADVENTURE GAME")
 print("PROCEED WITH CAUTION ( ͡° ͜ʖ ͡°)")
-print("\ntype HELP if ever you need help!")
-while True:
-    action = input("\nWhat would you like to do?") 
+print("\nyell HELP quick instructions!")
 
-    if action == "help": 
+commands = ["move", "equip", "attack", "loot", "on", "HELP"]
+while True:
+    action = input("\nWhat would you like to do? ") 
+
+    if not action_s[0] in commands:
+        print("Invalid command")
+
+    if action == "HELP": 
         helper = '''
+
+        list of commands: [move, equip, attack, loot]
+        
+        just type a command to get all possible actions
+        
+        or excute command right away
+        |
+        |
+        V
+
         move: DIRECTION (n,e,s,w)
         e.g. move n
 
@@ -16,9 +31,20 @@ while True:
         e.g. equip axe
         --> on: LOCATION
             e.g. on left hand
-            
+        
+        attack: ENEMY
+        e.g. attack blue goblin
 
-
+        loot: LOCATION
+        e.g. loot floor
         '''
         print(helper)
+        continue
+
+
+    action_s = action.split()
+
+    
+    
+
     
