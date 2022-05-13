@@ -22,5 +22,3 @@ def weapon_gen():
 
 
 #def armor_gen():
-    
-
