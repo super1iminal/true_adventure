@@ -4,13 +4,12 @@ class Level(object):
     """Class that represents a level/floor"""
     class Tile(object):
         """Class that represents a tile. Generated level + 3 times per level"""
-        def __init__(self, previousDirection = None, previousTile = None, location = '', tiletype = 'Enemy'):
+        def __init__(self, direction_from_previous = None, previousTile = None, location = '', tiletype = 'Enemy'):
             self.paths = {'n': None, 's': None, 'e': None, 'w': None}
-            if previousTile != None and previousDirection!=None:
-                self.paths[Level.Tile.antipath(previousDirection)] = previousTile
-
-
-
+            #creating link to tile that came before
+            if previousTile != None and direction_from_previous!=None:
+                self.paths[Level.Tile.antipath(direction_from_previous)] = previousTile
+            #generating enemies. temporary until enemies are actually coded
             if tiletype!='Start':
                 self.enemies = [0]*randint(0,10)
             self.location = location
@@ -29,7 +28,6 @@ class Level(object):
 
         def __add__(self, other):
             if len(self.enemies)>len(other.enemies):
-
                 return self
             else:
                 return other
@@ -65,34 +63,69 @@ class Level(object):
         self.tiles = 1
         self.locations = []
         #number of iterations around center
+
+
+
+    def __str__(self):
+        locations_visited = list()
+        rep = str(self.center_tile)
+        def r_strHelper(tile, location):
+            nonlocal locations_visited
+            nonlocal rep
+            if Level.is_deadend(tile):
+                return
+            else:             
+                for path in tile.paths:
+                    location_next = Level.Tile.locationparser(location+path)
+                    if not location_next in locations_visited and tile.paths[path]!=None: #if we haven't already visited the tile and if there's a tile there
+                        locations_visited += location_next
+                        rep += str(tile.paths[path])
+                        r_strHelper(tile.paths[path], location_next)
+                    
+        rep = r_strHelper(self.center_tile, '')
+        return rep
+
+
+
+    @staticmethod
+    def is_deadend(tile):
+        pathcounter = 0
+        for path in tile.paths:
+            if tile.paths[path]!=None:
+                pathcounter+=1
+        if pathcounter == 1:
+            return True
+        else: 
+            return False
+
+            
         
     def r_generate(self, tile, location, depth):
         if depth == self.maxdepth:
             return
         else:
             for path in tile.paths:
-                location_next = Level.Tile.locationparser(location + path)
+                location_next = Level.Tile.locationparser(location + path) #staticmethod so valid
                 if tile.paths[path] == None:
                     if randint(0,1) == 1:
                         if location_next in self.locations:
-                            existing_tile = Level.find_tile_from_plocation(location_next)
+
+                            existing_tile = self.center_tile
+                            for direction in location_next:
+                                if existing_tile.paths[direction] != None:
+                                    existing_tile = existing_tile.paths[direction]
+                            
                             tile.paths[path] = existing_tile
-                            existing_tile.paths[Level.Tile.antipath(path)] = tile
+                            existing_tile.paths[Level.Tile.antipath(path)] = tile #staticmethod so valid
                         else:
                             self.locations += location_next
                             self.tiles += 1 #counting tiles
                             tile.paths[path] = Level.Tile(path, tile, location_next)
-                            Level.r_generate(self, tile.paths[path], location_next, depth+1)
+                            self.r_generate(self, tile.paths[path], location_next, depth+1)
 
-    def find_tile_from_plocation(self, plocation):
-        """Finds a tile from the center using a parsed location"""
-        current_tile = self.center_tile
-        for direction in plocation:
-            if current_tile.paths[direction] != None:
-                current_tile = current_tile.paths[direction]
-            else:
-                raise ValueError("There is no tile at that location")
-        return current_tile
+level = Level(1)
+
+
 
 #we know have a level generator that generates a tile map, starting with the center tile and going outwards from there. 
 
