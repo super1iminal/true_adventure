@@ -71,7 +71,7 @@ class Level(object):
         self.stage = stage
         self.maxdepth = 3
         self.n_tiles = 1
-        self.locations = ['',]
+        self.locations = {'':'',}
         self.r_generate()
         #number of iterations around center
 
@@ -128,7 +128,6 @@ class Level(object):
             
     def r_generate(self):
         startingTile = self.center_tile
-        startingLocation = ''
         startingDepth = 0
         maxDepth = self.maxdepth
         def _r_generate(tile, depth):
@@ -144,16 +143,20 @@ class Level(object):
                         path_next = tile.pathto + path
                         if location_next in self.locations:
                             existing_tile = self.center_tile
-                            for direction in path_next:
+                            path_to_existing = self.locations[location_next]
+                            print('Tile exists at {}, trying to get there through {}'.format(location_next, path_to_existing))
+                            for direction in path_to_existing:
                                 if existing_tile.paths[direction] != None:
                                     existing_tile = existing_tile.paths[direction]
                             if existing_tile.location == location_next:
+                                print('Correctly matched existing tile location {} and location next {}'.format(existing_tile.location, location_next))
                                 tile.paths[path] = existing_tile
                                 existing_tile.paths[Level.Tile.antipath(path)] = tile #staticmethod so valid
                             else:
-                                print('Mismatched existing tile location and location next')
+                                print('Mismatched existing tile location {} and location next {}'.format(existing_tile.location, location_next))
+
                         else:
-                            self.locations += location_next
+                            self.locations[location_next] = path_next
                             self.n_tiles += 1 #counting tiles
                             tile.paths[path] = Level.Tile(path, tile, location_next, path_next)
                             _r_generate(tile.paths[path], depth+1)

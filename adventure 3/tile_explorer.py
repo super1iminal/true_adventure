@@ -4,6 +4,7 @@ def Explore():
     level = Level(1)
     current_tile = level.center_tile
     commands = ('n', 's', 'w', 'e')
+    print(level)
     while True:
         print(current_tile)
         for path in current_tile.paths:
