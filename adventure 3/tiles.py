@@ -160,8 +160,17 @@ class Level(object):
                             self.n_tiles += 1 #counting tiles
                             tile.paths[path] = Level.Tile(path, tile, location_next, path_next)
                             _r_generate(tile.paths[path], depth+1)
-
         _r_generate(startingTile, startingDepth)
+
+        #boss tile random walk:
+        from random import randint
+        n_to_direction = {1:'n', 2:'s', 3:'e', 4:'w'}
+        current_tile = self.center_tile
+        while True:
+            direction = randint(1,4)
+            if current_tile.paths[n_to_direction[direction]]!=None:
+                current_tile.paths[n_to_direction[direction]] = Level.Tile() #UNFINISHIED!!!
+
 
     @staticmethod
     def tile_from_direction(tile, direction):
