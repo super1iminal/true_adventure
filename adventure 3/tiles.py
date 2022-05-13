@@ -68,22 +68,22 @@ class Level(object):
 
     def __str__(self):
         locations_visited = list()
-        rep = str(self.center_tile)
+        represent = str(self.center_tile)
         def r_strHelper(tile, location):
             nonlocal locations_visited
-            nonlocal rep
+            nonlocal represent
             if Level.is_deadend(tile):
                 return
             else:             
                 for path in tile.paths:
-                    location_next = Level.Tile.locationparser(location+path)
+                    location_next = Level.Tile.locationparser(location+path) #staticmethod so valid
                     if not location_next in locations_visited and tile.paths[path]!=None: #if we haven't already visited the tile and if there's a tile there
                         locations_visited += location_next
-                        rep += str(tile.paths[path])
+                        represent += str(tile.paths[path])
                         r_strHelper(tile.paths[path], location_next)
-                    
-        rep = r_strHelper(self.center_tile, '')
-        return rep
+        center_tile_rep = str(self.center_tile)
+        represent = r_strHelper(self.center_tile, '')
+        return (center_tile_rep + represent)
 
 
 
