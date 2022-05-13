@@ -8,6 +8,10 @@ class Level(object):
         def __init__(self, direction_from_previous = None, previousTile = None, location = '', tiletype = 'Enemy'):
             self.tiletype = tiletype
             self.paths = {'n': None, 's': None, 'e': None, 'w': None}
+            if direction_from_previous!=None:
+                self.direction_to_previous = Level.Tile.antipath(direction_from_previous)
+            else:
+                self.direction_to_previous = None
             #creating link to tile that came before
             if previousTile != None and direction_from_previous!=None:
                 self.paths[Level.Tile.antipath(direction_from_previous)] = previousTile
@@ -63,44 +67,69 @@ class Level(object):
     def __init__(self, stage): #stage will start at 1
         self.center_tile = Level.Tile(tiletype = "Start")
         self.stage = stage
-        self.maxdepth = randint(3, int(stage) + 5)
+        self.maxdepth = 3
         self.tiles = 1
         self.locations = []
+        self.r_generate()
         #number of iterations around center
 
     def __str__(self):
-        locations_visited = list()
-        represent = str(self.center_tile)
-        def r_strHelper(tile, location):
-            nonlocal locations_visited
-            nonlocal represent
-            if Level.is_deadend(tile):
-                print('Dead end:', str(tile))
-                return
-            else:
-                print('Paths: ', tile.paths)
-                for path in tile.paths:
-                    location_next = Level.Tile.locationparser(location+path) #staticmethod so valid
-                    if not location_next in locations_visited and tile.paths[path]!=None: #if we haven't already visited the tile and if there's a tile there
-                        locations_visited += location_next
-                        print(tile.paths[path])
-                        represent += str(tile.paths[path])
-                        r_strHelper(tile.paths[path], location_next)
-        r_strHelper(self.center_tile, '')
-        return (represent)
+        #basically, I need this to go through every tile recursively
+        # this is like a virus, if a tile has already been 'infected' (visited), then skip it. the problem is, i need a central data storage,
+        # here it's visited locations, to store the data of where the virus has been
+        """        
+        def all_visited(tile, v_locations):
+            v_counter = 0
+            for path in tile.paths:
+                if Level.Tile.locationparser(path + tile.location) in v_locations or tile.paths[path]==None:
+                    v_counter += 1
+            if v_counter == 4:
+                return True
+            else: return False
 
+        """
+        repre = ''
+        visited_locations = ['',]
+        def strHelper(tile):
+            nonlocal visited_locations
+            nonlocal repre
+            repre += (str(tile) + "\n" )
+            for path in tile.paths:
+                if tile.paths[path]!=None and (Level.Tile.locationparser(tile.location + path) not in visited_locations):
+                    visited_locations += [Level.Tile.locationparser(tile.location + path)] #adding location of tile currently about to expand into to repetoire
+                    strHelper(tile.paths[path])
+        strHelper(self.center_tile)
+        return repre
+
+                
+            
 
 
     @staticmethod
+    
+        
+
+    @staticmethod
+    def tilecounter(tile):
+        pass
+
+    @staticmethod
     def is_deadend(tile):
-        pathcounter = 0
-        for path in tile.paths:
-            if tile.paths[path]!=None:
-                pathcounter+=1
-        if pathcounter == 1:
+        """Checks if a tile is a dead end or not"""
+        pathcounter = Level.n_paths_out(tile)
+        if pathcounter == 1 and tile.direction_to_previous != None:
             return True
         else: 
             return False
+
+    @staticmethod
+    def n_paths_out(tile):
+        """Checks how many paths come out of a tile"""
+        pathcounter = 0
+        for path in tile.paths:
+            if tile.paths[path]!=None:
+                pathcounter +=1
+        return pathcounter
 
             
     def r_generate(self):
@@ -134,8 +163,7 @@ class Level(object):
         _r_generate(startingTile, startingLocation, startingDepth)
 
 level = Level(1)
-level.r_generate()
-print(Level(1))
+print(level)
 
 
 
