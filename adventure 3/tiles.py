@@ -100,13 +100,6 @@ class Level(object):
                     strHelper(tile.paths[path])
         strHelper(self.center_tile)
         return repre
-
-                
-            
-
-
-    @staticmethod
-    
         
 
     @staticmethod
@@ -162,8 +155,11 @@ class Level(object):
 
         _r_generate(startingTile, startingLocation, startingDepth)
 
-level = Level(1)
-print(level)
+    @staticmethod
+    def tile_from_direction(tile, direction):
+        return tile.paths[direction]
+
+
 
 
 
