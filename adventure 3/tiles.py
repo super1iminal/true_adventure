@@ -1,10 +1,14 @@
 from random import randint
+from tracemalloc import start
+
+from numpy import tile
 
 class Level(object):
     """Class that represents a level/floor"""
     class Tile(object):
         """Class that represents a tile. Generated level + 3 times per level"""
         def __init__(self, direction_from_previous = None, previousTile = None, location = '', tiletype = 'Enemy'):
+            self.tiletype = tiletype
             self.paths = {'n': None, 's': None, 'e': None, 'w': None}
             #creating link to tile that came before
             if previousTile != None and direction_from_previous!=None:
@@ -12,20 +16,25 @@ class Level(object):
             #generating enemies. temporary until enemies are actually coded
             if tiletype!='Start':
                 self.enemies = [0]*randint(0,10)
+            else:
+                self.enemies = list()
             self.location = location
-
-        def __str__(self):
-            rep = "Location: {}, ".format(self.location)
-            rep += "Enemies: "
-            for enemy in self.enemies:
-                rep += (str(enemy) + ", ")
+        def __str__(self): #works
+            if self.tiletype == 'Start':
+                rep = "| Location: Start "
+            else:
+                rep = "| Location: {} | ".format(self.location)
+                rep += "Enemies: "
+                for enemy in self.enemies:
+                    rep += (str(enemy) + ", ")
+            rep += "| "
             rep += 'Paths: '
             for path in self.paths:
                 if self.paths[path]!=None:
                     rep += (path + ', ')
+            rep += "| "
 
             return rep
-
         def __add__(self, other):
             if len(self.enemies)>len(other.enemies):
                 return self
@@ -43,8 +52,6 @@ class Level(object):
                     directions_l.append(direction)
             return "".join(sorted(directions_l))
 
-
-
         @staticmethod
         def antipath(path):
             for pathpair in [['n', 's'], ['e','w']]:
@@ -53,7 +60,6 @@ class Level(object):
                     return pathpair[0]
             raise ValueError('No such path exists')
 
-            
 
 
     def __init__(self, stage): #stage will start at 1
@@ -64,8 +70,6 @@ class Level(object):
         self.locations = []
         #number of iterations around center
 
-
-
     def __str__(self):
         locations_visited = list()
         represent = str(self.center_tile)
@@ -73,17 +77,19 @@ class Level(object):
             nonlocal locations_visited
             nonlocal represent
             if Level.is_deadend(tile):
+                print('Dead end:', str(tile))
                 return
-            else:             
+            else:
+                print('Paths: ', tile.paths)
                 for path in tile.paths:
                     location_next = Level.Tile.locationparser(location+path) #staticmethod so valid
                     if not location_next in locations_visited and tile.paths[path]!=None: #if we haven't already visited the tile and if there's a tile there
                         locations_visited += location_next
+                        print(tile.paths[path])
                         represent += str(tile.paths[path])
                         r_strHelper(tile.paths[path], location_next)
-        center_tile_rep = str(self.center_tile)
-        represent = r_strHelper(self.center_tile, '')
-        return (center_tile_rep + represent)
+        r_strHelper(self.center_tile, '')
+        return (represent)
 
 
 
@@ -99,31 +105,39 @@ class Level(object):
             return False
 
             
-        
-    def r_generate(self, tile, location, depth):
-        if depth == self.maxdepth:
-            return
-        else:
-            for path in tile.paths:
-                location_next = Level.Tile.locationparser(location + path) #staticmethod so valid
-                if tile.paths[path] == None:
-                    if randint(0,1) == 1:
+    def r_generate(self):
+        startingTile = self.center_tile
+        startingLocation = self.center_tile.location
+        startingDepth = 0
+        maxDepth = self.maxdepth
+        def _r_generate(tile, location, depth):
+            nonlocal maxDepth
+            if depth == maxDepth:
+                print('Max Depth Reached. Returning')
+                return
+            else:
+                print("Generating...")
+                for path in tile.paths:
+                    if tile.paths[path] == None and randint(0,1) == 1:
+                        location_next = Level.Tile.locationparser(location + path) #staticmethod so valid
                         if location_next in self.locations:
-
                             existing_tile = self.center_tile
                             for direction in location_next:
                                 if existing_tile.paths[direction] != None:
                                     existing_tile = existing_tile.paths[direction]
-                            
                             tile.paths[path] = existing_tile
                             existing_tile.paths[Level.Tile.antipath(path)] = tile #staticmethod so valid
                         else:
                             self.locations += location_next
                             self.tiles += 1 #counting tiles
                             tile.paths[path] = Level.Tile(path, tile, location_next)
-                            self.r_generate(self, tile.paths[path], location_next, depth+1)
+                            _r_generate(tile.paths[path], location_next, depth+1)
+
+        _r_generate(startingTile, startingLocation, startingDepth)
 
 level = Level(1)
+level.r_generate()
+print(Level(1))
 
 
 
