@@ -1,10 +1,15 @@
-#here is where you'll get all the inputs and interpret them
+from items import *
+from player import *
+from inventory import *
 
+
+#here is where you'll get all the inputs and interpret them
 
 print("\nWelcome to our ADVENTURE GAME")
 print("PROCEED WITH CAUTION ( ͡° ͜ʖ ͡°)")
 print("\nyell HELP quick instructions!")
- 
+player1 = Player()
+
 mcommands = ["move", "equip", "attack", "loot", "HELP"] #main commands
 while True:
     action = input("\nWhat would you like to do? ") 
@@ -46,7 +51,12 @@ while True:
 
 
     if action_s[0] == "move":
-        #CHECK IF BACKPACK FULL, THEN CANT MOVE  backpack.is_over() backpack method)?
+        '''
+        if player1.inventory.backpack.isover():
+            print("You are too heavy to move, empty some of your inventory")
+            continue
+        '''
+
 
 
         if action == "move": 
