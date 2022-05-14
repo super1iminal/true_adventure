@@ -2,7 +2,7 @@ from items import *
 
 class Inventory(object):
     def __init__(self):
-        self.equipped = {'Amror': {'Head': None, 'Torso': Armor('Torso', 'Leather Chestpiece', 1, 1, 0), 'Arms': None, 'Legs': Armor('Torso', 'Ripped Pants', 1, 1, 0)}, 
+        self.equipped = {'Amror': {'Head': None, 'Torso': Armor('Torso', 'Leather Chestpiece', 1, 1), 'Arms': None, 'Legs': Armor('Torso', 'Ripped Pants', 1, 1)}, 
                             'Weapons': {'RHand': Weapon(itemname = "Lilith"), 'LHand': None}}
         self.backpack = Backpack(itemname = "Toad's Backpack", starteritem = consumableMaker(2))
 
