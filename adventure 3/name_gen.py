@@ -1,13 +1,14 @@
-def _adjective_gen():
+def _adjective_gen(n_adjectives = 2):
     from random import randint
     adjectives = ''
     adj = open ('words/adjectives.txt')
     adjective1 = adj.readline().strip().split()
     if randint(0,1) == 1:
         adjectives += adjective1[randint(0, len(adjective1)-1)] + " "
-    adjective2 = adj.readline().strip().split()
-    if randint(0,1) == 1:
-        adjectives += adjective2[randint(0, len(adjective2)-1)] + " "
+    if n_adjectives == 2:
+        adjective2 = adj.readline().strip().split()
+        if randint(0,1) == 1:
+            adjectives += adjective2[randint(0, len(adjective2)-1)] + " "
     adj.close()
     return adjectives
 
@@ -19,12 +20,13 @@ def weapon_gen():
     adjectives = _adjective_gen()
     weapon_name += adjectives
     weapon_name += weap[randint(0, len(weap)-1)]
+    fp.close()
     return weapon_name
 
 def armor_gen(location):
-    """Helmet, Torso, Arms, Legs"""
+    """Head, Torso, Arms, Legs"""
     from random import randint
-    location_to_ind = {'Helmet':0, 'Torso':1, 'Arms':2, 'Legs':3}
+    location_to_ind = {'Head':0, 'Torso':1, 'Arms':2, 'Legs':3}
     ind = location_to_ind[location]
     fp = open('words/armor.txt')
     armor_all = fp.readline().strip().split('|')
@@ -32,6 +34,7 @@ def armor_gen(location):
     armor_name = ""
     armor_name += _adjective_gen()
     armor_name += armor_specific[randint(0, len(armor_specific)-1)]
+    fp.close()
     return armor_name
 
 
@@ -40,7 +43,25 @@ def consumable_gen():
     fp = open('words/consumables.txt')
     consumable = fp.readline().strip('\n').split('-')
     consumable = consumable[randint(0, len(consumable)-1)]
+    fp.close()
     return consumable
+
+def enemy_gen(en_type = 'Enemy'):
+    from random import randint
+    enemy_name = ''
+    enemy_name += _adjective_gen(2)
+    if en_type == 'Enemy':
+        fp = open('words/enemies.txt')
+        enemies = fp.readline().strip().split('-')
+        enemy_name += enemies[randint(0, len(enemies)-1)]
+        fp.close()
+    else:
+        fp = open('words/bosses.txt')
+        bosses = fp.readline().strip().split('-')
+        enemy_name += bosses[randint(0, len(bosses)-1)]
+    return enemy_name
+
+
 
 #def armor_gen():
     

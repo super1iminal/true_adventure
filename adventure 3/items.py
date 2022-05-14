@@ -1,3 +1,18 @@
+def weaponMaker(stage):
+    from name_gen import weapon_gen
+    return Weapon(itemname = weapon_gen(), stage = stage)
+
+def armorMaker(stage, location):
+    """Helmet, Torso, Arms, Legs"""
+    from name_gen import armor_gen
+    return Armor(equipslot=location, itemname=armor_gen(location), stage = stage)
+
+def consumableMaker(stage):
+    from name_gen import consumable_gen
+    return Consumable(itemname=consumable_gen(), stage = stage)
+
+
+
 class Items(object):
     def __init__(self):
         pass
@@ -7,59 +22,35 @@ class Items(object):
 class Consumable(Items):
     itemtype = 'Consumable'
     def __init__(self, itemname = "Consumable", stage = 1, instant_hp = None):
+        from random import randint
         if instant_hp==None:
-            self.heal = stage+10
+            self.heal = randint(1, stage+10)
         else:
             self.heal = instant_hp
         self.name = itemname
     
     def __str__(self):
-        rep = "| {} | ".format(self.name)
-        if self.heal:
-            rep += "Instant HP: {} | ".format(self.heal)
-        if self.buff[0]:
-            rep += "Buff Type: {}, Buff Strength: {} | ".format(self.buff[0], self.buff[1])
+        rep = "| {} | Heal: {} |".format(self.name, self.heal)
         return rep
 
 
 class Armor(Items):
     itemtype = 'Armor'
-    def __init__(self, equipslot = "Torso", itemname = 'Armor', stage = 1, resistance = None, charmslots = None):
+    def __init__(self, equipslot = "Torso", itemname = 'Armor', stage = 1, resistance = None):
         from math import exp
         from random import randint
-        if resistance == None or charmslots == None:
+        if resistance == None:
             self.resistance = randint(1, stage + 5)
-            self.charmslots = randint(stage + 1) #1 at 1, 2 at 4, 3 at 6, maxes out at 6
         else:
             self.resistance = resistance
-            self.charmslots = charmslots
         self.charms = ()
         self.name = itemname
         self.level = stage
         self.equipslot = equipslot
 
     def __str__(self):
-        rep = "| {} | Slot: {} | Charmslots: {} | Resistance: {} |".format(self.name, self.equipslot, self.charmslots, self.resistance)
-        if self.charmslots>0:
-            rep += 'Charms: \n'
-            for charm in self.charms:
-                rep += str(charm) + '\n'
+        rep = "| {} | Slot: {} | Resistance: {} |".format(self.name, self.equipslot, self.resistance)
         return rep
-
-    def addcharm(self, charm):
-        if len(self.charms) < self.charmslots and self.charmslots:
-            self.charms = tuple(list(self.charms).append(charm))
-        else:
-            raise ValueError('Charm overflow')
-
-    def removecharm(self, charmname):
-        """Remove a charm. Returns the charm object"""
-        if len(self.charms) == 0:
-            raise ValueError('Charm underflow')
-        for charm in self.charms:
-            if charm.name.lower() == charmname.lower():
-                self.charms = tuple(list(self.charms).remove(charm))
-                return charm
 
 
 class Backpack(Items):
@@ -100,21 +91,6 @@ class Backpack(Items):
         for item in self.binventory:
             rep += str(item) + '\n'
 
-
-
-
-
-class Charm(Items):
-    itemtype = 'Charm'
-    def __init__(self, itemname = "Charm", buff_type = None, stage = 1):
-        from random import randint
-        from math import exp
-        self.name = itemname
-        buff_strength = randint(1, stage+5)
-        self.buff = (buff_type, buff_strength)
-
-    def __str__(self):
-        return "| {} | Buff: {} | Buff Strength: {} |".format(self.name, self.buff[0], self.buff[1])
         
 class Weapon(Items):
     itemtype = 'Weapon'
@@ -132,15 +108,3 @@ class Weapon(Items):
 
 
 
-def weaponMaker(stage):
-    from name_gen import weapon_gen
-    return Weapon(itemname = weapon_gen(), stage = stage)
-
-def armorMaker(stage, location):
-    """Helmet, Torso, Arms, Legs"""
-    from name_gen import armor_gen
-    return Armor(equipslot=location, itemname=armor_gen(location), stage = stage)
-
-def consumableMaker(stage):
-    from name_gen import consumable_gen
-    return Consumable(itemname=consumable_gen(), stage = stage)
