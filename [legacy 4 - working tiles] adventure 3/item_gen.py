@@ -17,20 +17,10 @@ def weapon_gen():
     weapon = open('words/weapons.txt')
     weap = weapon.readline().strip('\n').split('-')
     adjectives = adjective_gen()
-<<<<<<< HEAD
-    if randint(0,1) == 1:
-        weapon_name += adjectives
-        weapon_name += weap[randint(0, len(weap)-1)]
-    return weapon_name
-    
-adjective_gen()
-weapon_gen()
-=======
     weapon_name += adjectives
     weapon_name += weap[randint(0, len(weap)-1)]
 
 
->>>>>>> bf52a17ba559b46e4133c2a50fa10414583f686c
 #def armor_gen():
     
 

@@ -9,11 +9,10 @@ from tiles import *
 print("\nWelcome to our ADVENTURE GAME")
 print("PROCEED WITH CAUTION ( ͡° ͜ʖ ͡°)")
 print("\nyell HELP quick instructions!")
-
 gamer = Player()
 
 
-mcommands = ["move", "equip", "attack", "loot", "consume", "HELP"] #main commands
+mcommands = ["move", "equip", "attack", "loot", "HELP"] #main commands
 directions = ('n', 's', 'w', 'e')
 
 level = Level(1)
@@ -37,18 +36,28 @@ while True:
     if action == "HELP": #prints instructions for player
         helper = '''
 
-        list of commands: [move, equip, attack, loot, consume]
+        list of commands: [move, equip, attack, loot]
         
         just type a command to get all possible actions
         
         or excute command right away
-
         |
         |
         V
 
         move: DIRECTION (n,e,s,w)
         e.g. move n
+
+        equip: ITEM
+        e.g. equip axe
+        --> on: LOCATION
+            e.g. on left hand
+        
+        attack: ENEMY
+        e.g. attack blue goblin
+
+        loot: LOCATION
+        e.g. loot floor
         '''
         print(helper)
         continue
@@ -90,6 +99,10 @@ while True:
 
 
 
+
+
+
+
     if action_s[0] == "loot":
         if action == "loot":
             print("x") #CODE TO LIST ALL POSSIBLE LOOTABLE THINGS
@@ -115,52 +128,33 @@ while True:
         #CHECK IF LOOTABLE THING IS VALID THEN EXECUTE ATTACK
         continue
 
+    if action_s[0] == "equip":
+        if action == "equip":
+            print("x") #CODE TO LIST ALL POSSIBLE EQUIPABLE THINGS
+            equipc = input("What would you like to equip? ")
+            #CHECK IF INPUT IS VALID
+            print("y") #LIST ALL EQUIPABLE LOCATIONS
+            equipl = input("Where do you equip it? ")
+            #CHECK IF INPUT IS VALID THEN EXCUTE EQUIP ACTION
+            continue
+
+        if "on" in action_s[1:]:
+            onindex = action_s.index("on")
+            equipc = " ".join(action_s[1:onindex])
+            equipl = " ".join(action_s[onindex+1:])
+            #VERIFY BOTH INPUTS ARE VALID THEN EXECUTE
+            continue
+        else:
+            equipc = " ".join(action_s[1:onindex])
+            #VERIFY EQUIP CHOICE IS VALID
+            print("y") #LIST ALL EQUIPABLE LOCATIONS
+            equipl = input("Where do you equip it? ")
+            #CHECK IF INPUT IS VALID THEN EXCUTE EQUIP ACTION
+            continue
 
 
-    if action == "equip":
-        print("In Backpack: ")
-        for item in gamer.inventory.backpack.binventory:
-            print(item)
-        equipc = input("What would you like to equip? ")
-        for item in gamer.inventory.backpack.binventory:
-            if equipc == item.name:
-            
-                if (type(equipc) is Armor) or (type(equipc) is Weapon):
-                    gamer.inventory.equip(equipc)
-                    continue
-                    
-                else:
-                    print("Could not equip that item")
-                    continue
-                
-            else:
-                print("Could not find that item")
-                continue
     
-    if action == "consume":
-        print("In Backpack: ")
-        for item in gamer.inventory.backpack.binventory:
-            print(item)
-        eat = input("What would you like the consume? ")
-        for item in gamer.inventory.backpack.binventory:
-            if eat == item.name:
-                if type(eat) is Consumables:
-                    gamer.inventory.equip(equipc)
-                    continue
-                else:
-                    print("Could not consume that item")
-                    continue
-            else:
-                print("Could not find that item")
-                continue
 
-
-
-
-
-        
-
-           
 
 
 
