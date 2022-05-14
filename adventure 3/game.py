@@ -16,16 +16,16 @@ gamer = Player()
 mcommands = ["move", "equip", "attack", "loot", "HELP"] #main commands
 directions = ('n', 's', 'w', 'e')
 
-#level = Level(1)
-#current_tile = level.center_tile
+level = Level(1)
+current_tile = level.center_tile
 
 while True:
-    '''
+    
     print(current_tile)
     for path in current_tile.paths:
         if current_tile.paths[path]!=None:
             print(path, current_tile.paths[path])
-            '''
+            
 
     action = input("\nWhat would you like to do? ") 
 
@@ -135,29 +135,26 @@ while True:
             for item in gamer.inventory.backpack.binventory:
                 print(item)
             equipc = input("What would you like to equip? ")
-            #CHECK IF INPUT IS VALID
-            print("y") #LIST ALL EQUIPABLE LOCATIONS
-            equipl = input("Where do you equip it? ")
-            #CHECK IF INPUT IS VALID THEN EXCUTE EQUIP ACTION
-            continue
+            for item in gamer.inventory.backpack.binventory:
+                if equipc == item.name:
+            
+                    if type(equipc) is Armor:
+                        gamer.inventory.equip(equipc)
+                        continue
+                    
+                    if type(equipc) is Weapon:
+                        gamer.inventory.equip(equipc)
+                        continue
+                    else:
+                        print("Could not equip that item")
+                        continue
+                    
 
-        if "on" in action_s[1:]:
-            onindex = action_s.index("on")
-            equipc = " ".join(action_s[1:onindex])
-            equipl = " ".join(action_s[onindex+1:])
-            #VERIFY BOTH INPUTS ARE VALID THEN EXECUTE
-            continue
-        else:
-            equipc = " ".join(action_s[1:onindex])
-            #VERIFY EQUIP CHOICE IS VALID
-            print("y") #LIST ALL EQUIPABLE LOCATIONS
-            equipl = input("Where do you equip it? ")
-            #CHECK IF INPUT IS VALID THEN EXCUTE EQUIP ACTION
-            continue
+                else:
+                    print("Could not find that item")
+                    continue
 
-
-    
-
+           
 
 
 
