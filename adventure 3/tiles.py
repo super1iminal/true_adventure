@@ -76,6 +76,7 @@ class Level(object):
         self.locations = {'':'',}
         self.path_to_boss = ''
         self.r_generate()
+        
         #number of iterations around center
 
     def __str__(self):
@@ -168,15 +169,13 @@ class Level(object):
         directions = list(current_tile.paths.keys())
         while True:
             direction = directions[randint(0,3)]
-            if current_tile.paths[direction] == None:
+            if (Level.Tile.locationparser(current_tile.location + direction) not in self.locations) and (current_tile.paths[direction]==None): #the first part should be enough but just to be safe i'll add the and none whatever
                 current_tile.paths[direction] = Level.Tile(direction, current_tile, Level.Tile.locationparser(current_tile.location + direction), current_tile.pathto + direction, tiletype='Boss', stage = self.stage)
                 print('Boss created!')
                 self.path_to_boss = current_tile.pathto + direction
                 break
             else:
                 current_tile = current_tile.paths[direction]
-
-        print('Number of tiles:', str(self.n_tiles))
 
     @staticmethod
     def tile_from_direction(tile, direction):
