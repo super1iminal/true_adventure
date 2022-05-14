@@ -141,7 +141,7 @@ while True:
         eat = input("What would you like the consume? ")
         for item in gamer.inventory.backpack.binventory:
             if eat == item.name:
-                if type(eat) is Consumables:
+                if type(eat) is Consumable:
                     gamer.inventory.equip(equipc)
                     continue
                 else:
