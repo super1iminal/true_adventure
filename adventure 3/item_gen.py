@@ -20,9 +20,10 @@ def weapon_gen():
     if randint(0,1) == 1:
         weapon_name += adjectives
         weapon_name += weap[randint(0, len(weap)-1)]
-
+    return weapon_name
+    
 adjective_gen()
-
+weapon_gen()
 #def armor_gen():
     
 
