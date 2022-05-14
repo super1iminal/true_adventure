@@ -4,7 +4,7 @@ class Inventory(object):
     def __init__(self):
         self.equipped = {'Amror': {'Head': None, 'Torso': Armor('Torso', 'Leather Chestpiece', 1, 1, 0), 'Arms': None, 'Legs': Armor('Torso', 'Ripped Pants', 1, 1, 0)}, 
                             'Weapons': {'RHand': Weapon(itemname = "Lilith"), 'LHand': None}}
-        self.backpack = Backpack(itemname = "Toad's Backpack", starteritem = Charm(itemname= "Golden Ring", buff_type = 'HP', stage = 1))
+        self.backpack = Backpack(itemname = "Toad's Backpack", starteritem = consumableMaker(2))
 
 
     def checknames(self):
