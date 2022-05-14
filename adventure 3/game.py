@@ -9,22 +9,23 @@ from tiles import *
 print("\nWelcome to our ADVENTURE GAME")
 print("PROCEED WITH CAUTION ( ͡° ͜ʖ ͡°)")
 print("\nyell HELP quick instructions!")
+
 gamer = Player()
 
 
 mcommands = ["move", "equip", "attack", "loot", "HELP"] #main commands
 directions = ('n', 's', 'w', 'e')
 
-level = Level(1)
-current_tile = level.center_tile
+#level = Level(1)
+#current_tile = level.center_tile
 
 while True:
-    
+    '''
     print(current_tile)
     for path in current_tile.paths:
         if current_tile.paths[path]!=None:
             print(path, current_tile.paths[path])
-            
+            '''
 
     action = input("\nWhat would you like to do? ") 
 
@@ -127,7 +128,9 @@ while True:
 
     if action_s[0] == "equip":
         if action == "equip":
-            print("x") #CODE TO LIST ALL POSSIBLE EQUIPABLE THINGS
+            print("In Backpack: ")
+            for item in gamer.inventory.backpack.binventory:
+                print(item)
             equipc = input("What would you like to equip? ")
             #CHECK IF INPUT IS VALID
             print("y") #LIST ALL EQUIPABLE LOCATIONS
