@@ -1,0 +1,4 @@
+make combat system and ignore the fact that duplicate items might exist. 
+
+OH, a fix for the duplicate items would be to, when an item is looted, if the name already exists in inventory, add something (like a number) to its name
+
