@@ -16,22 +16,24 @@ class Level(object):
             if previousTile != None and direction_from_previous!=None:
                 self.paths[Level.Tile.antipath(direction_from_previous)] = previousTile
             #generating enemies. temporary until enemies are actually coded
-            if tiletype!='Start':
-                self.enemies = [0]*randint(0,10)
-            else:
+            if tiletype=='Enemy':
+                self.enemies = [0]*randint(2,5)
+            elif tiletype == 'Boss':
+                self.enemies = [0,]
+            elif tiletype == 'Start':
                 self.enemies = list()
             
             #LOCATIONS
             self.location = location
             self.pathto = pathto
         def __str__(self): #works
-            if self.tiletype == 'Start':
-                rep = "| Location: Start "
-            else:
-                rep = "| Location: {} | ".format(self.location)
-                rep += "Enemies: "
+            rep = "| Location: {} | Type: {} | ".format(self.location, self.tiletype)
+            rep += "Enemies: "
+            if self.enemies:
                 for enemy in self.enemies:
                     rep += (str(enemy) + ", ")
+            else:
+                rep += 'None '
             rep += "| Paths: "
             for path in self.paths:
                 if self.paths[path]!=None:
@@ -72,6 +74,7 @@ class Level(object):
         self.maxdepth = 3
         self.n_tiles = 1
         self.locations = {'':'',}
+        self.path_to_boss = ''
         self.r_generate()
         #number of iterations around center
 
@@ -79,7 +82,7 @@ class Level(object):
         #basically, I need this to go through every tile recursively
         # this is like a virus, if a tile has already been 'infected' (visited), then skip it. the problem is, i need a central data storage,
         # here it's visited locations, to store the data of where the virus has been
-        return str(self.n_tiles)
+        return "Number of tiles: {}".format(str(self.n_tiles)) + "\nPath to boss: {}".format(self.path_to_boss) 
         """      
         def all_visited(tile, v_locations):
             v_counter = 0
@@ -145,12 +148,10 @@ class Level(object):
                         if location_next in self.locations:
                             existing_tile = self.center_tile
                             path_to_existing = self.locations[location_next]
-                            print('Tile exists at {}, trying to get there through {}'.format(location_next, path_to_existing))
                             for direction in path_to_existing:
                                 if existing_tile.paths[direction] != None:
                                     existing_tile = existing_tile.paths[direction]
                             if existing_tile.location == location_next:
-                                print('Correctly matched existing tile location {} and location next {}'.format(existing_tile.location, location_next))
                                 tile.paths[path] = existing_tile
                                 existing_tile.paths[Level.Tile.antipath(path)] = tile #staticmethod so valid
                             else:
@@ -161,8 +162,21 @@ class Level(object):
                             self.n_tiles += 1 #counting tiles
                             tile.paths[path] = Level.Tile(path, tile, location_next, path_next)
                             _r_generate(tile.paths[path], depth+1)
+        
         _r_generate(startingTile, startingDepth)
+        current_tile = self.center_tile
+        directions = list(current_tile.paths.keys())
+        while True:
+            direction = directions[randint(0,3)]
+            if current_tile.paths[direction] == None:
+                current_tile.paths[direction] = Level.Tile(direction, current_tile, Level.Tile.locationparser(current_tile.location + direction), current_tile.pathto + direction, tiletype='Boss')
+                print('Boss created!')
+                self.path_to_boss = current_tile.pathto + direction
+                break
+            else:
+                current_tile = current_tile.paths[direction]
 
+        print('Number of tiles:', str(self.n_tiles))
 
     @staticmethod
     def tile_from_direction(tile, direction):

@@ -163,7 +163,6 @@ class Level(object):
         _r_generate(startingTile, startingDepth)
 
         #boss tile random walk:
-        from random import randint
         n_to_direction = {1:'n', 2:'s', 3:'e', 4:'w'}
         current_tile = self.center_tile
         while True:

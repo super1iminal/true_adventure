@@ -4,13 +4,14 @@ class Items(object):
     pass
 
 
-class Consumables(Items):
+class Consumable(Items):
     itemtype = 'Consumable'
-    def __init__(self, itemname = "Consumable", itemsize = 'Small', instant_hp = 0, buff_type = None, buff_amount = 0):
-        self.heal = instant_hp
-        self.buff = (buff_type, buff_amount)
+    def __init__(self, itemname = "Consumable", stage = 1, instant_hp = None):
+        if instant_hp==None:
+            self.heal = stage+10
+        else:
+            self.heal = instant_hp
         self.name = itemname
-        self.size = itemsize
     
     def __str__(self):
         rep = "| {} | ".format(self.name)
@@ -26,7 +27,7 @@ class Armor(Items):
     def __init__(self, equipslot = "Torso", itemname = 'Armor', stage = 1, resistance = None, charmslots = None):
         from math import exp
         from random import randint
-        if resistance == None and charmslots == None:
+        if resistance == None or charmslots == None:
             self.resistance = randint(1, stage + 5)
             self.charmslots = randint(stage + 1) #1 at 1, 2 at 4, 3 at 6, maxes out at 6
         else:
@@ -119,7 +120,6 @@ class Weapon(Items):
     itemtype = 'Weapon'
     def __init__(self, itemname = "Weapon", stage = 5, damage = None):
         from random import randint
-        from math import exp
         self.name = itemname
         if damage == None:
             self.damage = randint(1,stage+5)
@@ -132,3 +132,15 @@ class Weapon(Items):
 
 
 
+def weaponMaker(stage):
+    from name_gen import weapon_gen
+    return Weapon(itemname = weapon_gen(), stage = stage)
+
+def armorMaker(stage, location):
+    """Helmet, Torso, Arms, Legs"""
+    from name_gen import armor_gen
+    return Armor(equipslot=location, itemname=armor_gen(location), stage = stage)
+
+def consumableMaker(stage):
+    from name_gen import consumable_gen
+    return Consumable(itemname=consumable_gen(), stage = stage)

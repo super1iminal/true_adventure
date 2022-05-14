@@ -22,19 +22,16 @@ current_tile = level.center_tile
 while True:
     
     print(current_tile)
-    for path in current_tile.paths:
-        if current_tile.paths[path]!=None:
-            print(path, current_tile.paths[path])
             
 
-    action = input("\nWhat would you like to do? ") 
+    action = input("\nWhat would you like to do? ").lower()
 
     action_s = action.split()
     if not action_s[0] in mcommands:
         print("Invalid command")
         continue
 
-    if action == "HELP": #prints instructions for player
+    if action == "help": #prints instructions for player
         helper = '''
 
         list of commands: [move, equip, attack, loot, consume]
