@@ -7,6 +7,9 @@ def Explore():
     print(level)
     while True:
         print(current_tile)
+        for path in current_tile.paths:
+            if current_tile.paths[path]!=None:
+                print(path, current_tile.paths[path])
         command = input('directional command: ')
         if command in commands:
             if current_tile.paths[command]!=None:
