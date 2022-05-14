@@ -18,6 +18,13 @@ also if there are enemies we can either be locked into fighting them or we can m
 to find the tile we came from, just keep track of previous_tile as well as current_tile. if the current_tile.paths[direction] == previous_tile, let the player do it
 
 i made enemies fully working btw. 
+ 
+**************FROM PANA******************
+-i think we should keep things as simple as possible for now until we get a working, submitable game
+i dont want to stress over this too much tmrw since i got a final exam on monday
+-i think the look command should be called "inspect"
+<3 u asher, also <3 u hien
+*****************************************
 
 
 
@@ -160,6 +167,8 @@ while True:
             else:
                 print("Could not find that item")
                 continue
+
+
     
     if action == "consume":
         print("In Backpack: ")
