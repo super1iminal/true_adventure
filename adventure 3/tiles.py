@@ -174,8 +174,10 @@ class Level(object):
                 print('Boss created!')
                 self.path_to_boss = current_tile.pathto + direction
                 break
-            else:
+            elif current_tile.paths[direction]!=None:
                 current_tile = current_tile.paths[direction]
+            
+            
 
     @staticmethod
     def tile_from_direction(tile, direction):
