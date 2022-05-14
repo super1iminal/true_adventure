@@ -4,3 +4,6 @@ OH, a fix for the duplicate items would be to, when an item is looted, if the na
 
 -method to consume a consumable, right now we only have equip
 -not sure if looting works yet, but that too
+-play test and balance out the game
+-write documentation 
+
