@@ -1,11 +1,11 @@
 from random import randint
-
+from enemies import *
 
 class Level(object):
     """Class that represents a level/floor"""
     class Tile(object):
         """Class that represents a tile. Generated level + 3 times per level"""
-        def __init__(self, direction_from_previous = None, previousTile = None, location = '', pathto = '', tiletype = 'Enemy'):
+        def __init__(self, direction_from_previous = None, previousTile = None, location = '', pathto = '', tiletype = 'Enemy', stage = 1):
             self.tiletype = tiletype
             self.paths = {'n': None, 's': None, 'e': None, 'w': None}
             if direction_from_previous!=None:
@@ -16,12 +16,12 @@ class Level(object):
             if previousTile != None and direction_from_previous!=None:
                 self.paths[Level.Tile.antipath(direction_from_previous)] = previousTile
             #generating enemies. temporary until enemies are actually coded
+            self.enemies = list()
             if tiletype=='Enemy':
-                self.enemies = [0]*randint(2,5)
+                for _ in range(randint(0, stage+1)):
+                    self.enemies.append(enemyMaker(stage))
             elif tiletype == 'Boss':
-                self.enemies = [0,]
-            elif tiletype == 'Start':
-                self.enemies = list()
+                self.enemies.append(enemyMaker(stage, "Boss"))
             
             #LOCATIONS
             self.location = location
@@ -69,7 +69,7 @@ class Level(object):
 
 
     def __init__(self, stage): #stage will start at 1
-        self.center_tile = Level.Tile(tiletype = "Start")
+        self.center_tile = Level.Tile(tiletype = "Start", stage = stage)
         self.stage = stage
         self.maxdepth = 3
         self.n_tiles = 1
@@ -160,7 +160,7 @@ class Level(object):
                         else:
                             self.locations[location_next] = path_next
                             self.n_tiles += 1 #counting tiles
-                            tile.paths[path] = Level.Tile(path, tile, location_next, path_next)
+                            tile.paths[path] = Level.Tile(path, tile, location_next, path_next, stage = self.stage)
                             _r_generate(tile.paths[path], depth+1)
         
         _r_generate(startingTile, startingDepth)
@@ -169,7 +169,7 @@ class Level(object):
         while True:
             direction = directions[randint(0,3)]
             if current_tile.paths[direction] == None:
-                current_tile.paths[direction] = Level.Tile(direction, current_tile, Level.Tile.locationparser(current_tile.location + direction), current_tile.pathto + direction, tiletype='Boss')
+                current_tile.paths[direction] = Level.Tile(direction, current_tile, Level.Tile.locationparser(current_tile.location + direction), current_tile.pathto + direction, tiletype='Boss', stage = self.stage)
                 print('Boss created!')
                 self.path_to_boss = current_tile.pathto + direction
                 break

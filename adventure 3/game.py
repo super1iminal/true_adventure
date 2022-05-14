@@ -3,7 +3,34 @@ from player import *
 from inventory import *
 from tiles import *
 
+"""
 
+
+read me
+
+
+
+this is good :)
+
+you should also add a look command. im eventually gonna change inventory repr to just print item names, so you'd need to look at an item to see its stats
+also able to look at enemies to see their stats so u can see if u can beat them before u attack
+also if there are enemies we can either be locked into fighting them or we can make it so that we're able to go back to the tile that we came from. your choice.
+to find the tile we came from, just keep track of previous_tile as well as current_tile. if the current_tile.paths[direction] == previous_tile, let the player do it
+
+i made enemies fully working btw. 
+
+
+
+
+
+
+
+
+
+
+
+
+"""
 #here is where you'll get all the inputs and interpret them
 
 print("\nWelcome to our ADVENTURE GAME")
