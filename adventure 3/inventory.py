@@ -2,7 +2,7 @@ from items import *
 
 class Inventory(object):
     def __init__(self):
-        self.equipped = {'Amror': {'Head': None, 'Torso': Armor('Torso', 'Leather Chestpiece', 1, 1), 'Arms': None, 'Legs': Armor('Torso', 'Ripped Pants', 1, 1)}, 
+        self.equipped = {'Armor': {'Head': None, 'Torso': Armor('Torso', 'Leather Chestpiece', 1, 1), 'Arms': None, 'Legs': Armor('Legs', 'Ripped Pants', 1, 1)}, 
                             'Weapons': {'RHand': Weapon(itemname = "Lilith"), 'LHand': None}}
         self.backpack = Backpack(itemname = "Toad's Backpack", starteritem = consumableMaker(2))
 
@@ -14,7 +14,7 @@ class Inventory(object):
             for location in self.equipped[itemtype]:
                 if self.equipped[itemtype][location]!=None:
                     armornames[location] = self.equipped[itemtype][location].name
-        return {'Armor': armornames, 'Wepons': weaponnames}
+        return {'Armor': armornames, 'Weapons': weaponnames}
 
     def unequip(self, itemname = None, item_location = None):
         if itemname == None and location == None:
@@ -57,11 +57,14 @@ class Inventory(object):
                             self.backpack.add_item(equippeditem)
                             self.equipped[itemtype][location] = item
 
+    def drop(self, itemname, tile):
+        tile.loot.append(self.backpack.remove_item(itemname))
+
     def weapon_damage(self):
         damage = 0
-        for location in self.equipped['Weapon']:
-            if self.equipped['Weapon'][location]!=None:
-                damage += self.equipped['Weapon'][location].damage
+        for location in self.equipped['Weapons']:
+            if self.equipped['Weapons'][location]!=None:
+                damage += self.equipped['Weapons'][location].damage
         return damage
 
     def armor_resistance(self):
@@ -70,6 +73,22 @@ class Inventory(object):
             if self.equipped['Armor'][location]!=None:
                 resistance += self.equipped['Armor'][location].resistance
         return resistance
+
+    def showArmor(self):
+        return "-Head: {}\n-Torso: {}\n-Arms: {}\n-Legs: {}".format(str(self.equipped['Armor']['Head']), str(self.equipped['Armor']['Torso']), str(self.equipped['Armor']['Arms']), str(self.equipped['Armor']['Legs']))
+
+    def showWeapons(self):
+        return "-RHand: {}\n-LHand: {}".format(str(self.equipped['Weapons']['RHand']), str(self.equipped['Weapons']['LHand']))
+
+    def showBackpack(self):
+        rep = ""
+        for item in self.backpack.binventory:
+            rep += "-" + str(item) + "\n"
+        if not rep:
+            rep = 'None.'
+        return rep
+
+        
 
 
 

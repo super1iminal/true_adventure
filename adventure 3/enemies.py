@@ -22,7 +22,7 @@ class Enemy(object):
 
         #loot creater
         from items import weaponMaker, armorMaker, consumableMaker
-        self.loot = []
+        self.loot = list()
         for _ in range(randint(0, stage + (multiplier))):
             choice = randint(1,3)
             if choice==1:
@@ -34,29 +34,33 @@ class Enemy(object):
                 self.loot.append(armorMaker(stage, location))
     
     def __str__(self):
-        rep = "| {} | Health: {} | Damage: {} | ".format(self.name, self.health, self.damage)
-        rep += "Loot: "
-        for loot in self.loot:
-            rep += str(loot) + ", "
-        if not self.loot:
-            rep += "None | "
+        return "{} (Health: {}, Damage: {})".format(self.name, self.health, self.damage)
 
+    def showLoot(self):
+        rep = "{}'s loot: ".format(self.name)
+        if len(self.loot)==0:
+            rep += 'None.'
+            return rep
+        else:
+            for loot in self.loot:
+                rep += "\n" + str(loot)
         return rep
 
-    def _is_dead(self):
-        if self.hp<=0:
+
+    def is_dead(self):
+        if self.health<=0:
             return True
         else:
             return False
         
     def damage_dealt(self):
-        return self.damage
+        return int(self.damage)
 
     def damage_taken(self, true_damage):
         """Deals damage to the player. Returns boolean of if the enemy is dead or not"""
         self.health = self.health - (true_damage - self.resistance)
         self.resistance - 1
-        return self._is_dead()
+        return self.is_dead()
 
     def showHealth(self):
         return str(self.health)

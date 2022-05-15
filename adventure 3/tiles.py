@@ -22,6 +22,7 @@ class Level(object):
                     self.enemies.append(enemyMaker(stage))
             elif tiletype == 'Boss':
                 self.enemies.append(enemyMaker(stage, "Boss"))
+            self.loot = list()
             
             #LOCATIONS
             self.location = location
@@ -66,6 +67,16 @@ class Level(object):
                     return pathpair[0]
             raise ValueError('No such path exists')
 
+        def showLoot(self):
+            rep = "Tile's loot: "
+            if len(self.loot)==0:
+                rep += 'None.'
+                return rep
+            else:
+                for loot in self.loot:
+                    rep += "\n" + str(loot)
+            return rep
+
 
 
     def __init__(self, stage): #stage will start at 1
@@ -76,6 +87,7 @@ class Level(object):
         self.locations = {'':'',}
         self.path_to_boss = ''
         self.r_generate()
+        self.boss_slayed = False
         
         #number of iterations around center
 

@@ -11,13 +11,14 @@ class Player(object):
         self.inventory = Inventory()
         self.enemies_killed = 0
         self.xp = xp
-        self.level = round(xp/20)
+        self.level = xp//20
 
     def xpIncrease(self, xp):
         self.xp += xp
         prevlevel = self.level
-        self.level = round(xp/20)
+        self.level = xp//20
         if self.level > prevlevel:
+            print("You levelled up! Level: {}. Health restored.".format(self.level))
             self._levelUp()
 
     def _levelUp(self):
@@ -26,14 +27,16 @@ class Player(object):
         self.bdamage += 1
 
     def damage_dealt(self):
-        return self.bdamage + self.inventory.weapon_damage()
+        return int(self.bdamage) + int(self.inventory.weapon_damage())
 
     def damage_taken(self, true_damage):
         """Deals damage to the player. Returns boolean of if the player is dead or not"""
         self.health = self.health - (true_damage - self.inventory.armor_resistance())
-        return self._is_dead()
+        return self.is_dead()
 
-    def _is_dead(self):
+        
+
+    def is_dead(self):
         if self.health<=0:
             return True
         else:
@@ -54,6 +57,15 @@ class Player(object):
         self._heal(healpower=healpower)
         return
 
+    def showLoot(self):
+        rep = "Equipped armor:\n"
+        rep += self.inventory.showArmor()
+        rep += "\nEquipped weapons:\n"
+        rep += self.inventory.showWeapons()
+        rep += '\nGear in backpack:\n'
+        rep += self.inventory.showBackpack()
+        return rep
+
     def showCHealth(self):
         return str(self.health)
     
@@ -70,4 +82,4 @@ class Player(object):
         return str(self.name)
 
     def __str__(self):
-        return '| {} | Max Health: {} | Current Health: {} | Base Damage: {} | Total Damage with Weapons: {} |'.format(self.name, self.maxhealth, self.health, self.bdamage, Player.damage_dealt())
+        return '| {} | Level: {} | Max Health: {} | Current Health: {} | Base Damage: {} | Total Damage with Weapons: {} |'.format(self.name, self.level, self.maxhealth, self.health, self.bdamage, self.damage_dealt())

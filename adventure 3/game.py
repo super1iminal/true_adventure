@@ -28,6 +28,26 @@ i dont want to stress over this too much tmrw since i got a final exam on monday
 <3 u asher, also <3 u hien
 *****************************************
 
+ok I made combat fully working. enemies drop items into current_tile.loot now. no looting yet, but here's what i'm thinking: instead of 'loot' we just have an action called look.
+
+look has 3 main components:
+look inventory: checks your inventory and equipment player.showLoot()
+look enemy: looks at an enemy's loot. enemy.showLoot()
+look ground: looks at ground an enables looting. current_tile.showLoot()
+
+****i made all the show loot stuff already so just implement it in the game
+
+
+YOU ALSO need to make it so that the player is able to pick up items and put them in the backpack from the ground.
+    make a new command called take
+    make it seperate from the look command or implement it if the player looks at the ground idc
+    make the take command remove an item from the current_tile by name - look at my other code for adding and removing code by name to figure this out if u dont know how
+            for this you don't need to make a method in any other files, you can do it from this file only
+    and then put that item in the backpack by doing inventory.backpack.add_item(item) or whatever
+
+THEN WE'RE DONE BABY
+
+
 
 
 
@@ -48,14 +68,13 @@ print("\nyell HELP quick instructions!")
 
 gamer = Player()
 
-
-mcommands = ("move", "equip", "attack", "loot", "consume", "HELP") #main commands
+mcommands = ("move", "equip", "attack", "loot", "consume", "help", 'continue') #main commands
 directions = ('n', 's', 'w', 'e')
 
 helpmsg = '''
-list of main commands: {}
+List of commands: {}
 
-type a main command to get all possible actions
+Type a main command to get all possible actions
 
 or excute command right away
 
@@ -64,15 +83,40 @@ or excute command right away
             V
 
 move + (n,e,s,w)
-e.g. move n'''
+e.g. move n'''.format(mcommands)
+
+ccommands = ('attack', 'consume', 'help')
 
 
+helpmsg_c = '''
+You're in combat. Doing any action (except help) will end your turn.
+
+list of combat commands: {}
+Type a combat command to get all possible actions. 
+'''
+
+boss_slayed_msg = """
+Congratulations, adventuer! You've slayed the boss!
+
+
+"""
 
 level = Level(1)
 current_tile = level.center_tile
 
 while True:
-    print("You're here: ", str(current_tile))
+    if gamer.is_dead():
+        tryagain = input('Game Over! Try again? y/n\n').strip().lower()
+        if tryagain == "y":
+            gamer = Player()
+            level = Level(1)
+            current_tile = level.center_tile
+            continue
+        else:
+            print('Thanks for playing!')
+            break
+
+    print(str(current_tile))
 
     action = input("\nWhat would you like to do? ").strip().lower()
     action_s = action.split()
@@ -85,17 +129,37 @@ while True:
         print(helpmsg)
         continue
 
-
+    if action_s[0] == 'continue':
+        if level.boss_slayed:
+            print('Good luck on the next level!')
+            current_stage = level.stage
+            level = Level(current_stage+1)
+            current_tile = level.center_tile
+            continue
+        else:
+            print("You haven't beat the boss yet!")
+            continue
 
     if action_s[0] == "move":
         if gamer.inventory.backpack.is_over():
             print("You are too heavy to move, empty some of your inventory")
+            continue
+        
+        if len(current_tile.enemies) > 0:
+            print('There are enemies. You must kill them to move on.')
             continue
 
         if len(action_s[0]) == 1: 
             dir = input("In which direction do you move? ")
             if dir in directions:
                 if current_tile.paths[dir]!=None:
+                    if current_tile.paths[dir].tiletype == 'Boss':
+                        yn = input('Warning! That tile is the boss! Do you still want to continue? y/n\n')
+                        if yn!='y':
+                            print('Fair choice.')
+                            continue
+                        else:
+                            print('Good luck.')
                     current_tile = current_tile.paths[dir]
                     continue
                 else:
@@ -105,13 +169,18 @@ while True:
         
         if action_s[1] in directions:
             if current_tile.paths[action_s[1]]!=None:
-                    current_tile = current_tile.paths[action_s[1]]
-                    continue
+                if current_tile.paths[action_s[1]].tiletype == 'Boss':
+                    yn = input('Warning! That tile is the boss! Do you still want to continue? y/n\n')
+                    if yn!='y':
+                        print('Fair choice.')
+                        continue
+                    else:
+                        print('Good luck.')
+                current_tile = current_tile.paths[action_s[1]]
+                continue
             else:
                 print("You can't go that way!")
                 continue
-           
-               
         else:
             print("Invalid direction")
             continue
@@ -134,17 +203,78 @@ while True:
 
 
     if action_s[0] == "attack":
-        if action == "attack":
-            print('x') #CODE TO LIST ALL POSSIBLE ATTACKIBLES
-            attackc = input("What would you like to attack? ")
-            #CHECK IF INPUT IS VALID THEN EXCUTE ATTACK ACTION
+        enemies_d = {}
+        enemies_l = []
+        for enemy_instance in current_tile.enemies:
+            enemies_d[(enemy_instance.showName()).lower()] = enemy_instance
+            enemies_l.append(enemy_instance.showName())
+        if len(action_s)==1:
+            en_choice = input('What enemy would you like to fight?: ' + str(list(enemies_l)) + "\n").strip().lower()
+        else:
+            en_choice = " ".join(action_s[1:])
+        if en_choice not in list(enemies_d.keys()):
+            print("Tha enemy is not one you can fight right now. ({})".format(en_choice))
             continue
+        
+        #enemy being assigned:
+        enemy = enemies_d[en_choice]
 
-        attackable = " ".join(action_s[1:])
-        #CHECK IF LOOTABLE THING IS VALID THEN EXECUTE ATTACK
+        #combat start:
+        while True:
+            if gamer.is_dead():
+                print('You died.')
+                break
+            if enemy.is_dead():
+                if enemy.en_type == 'Boss':
+                    level.boss_slayed = True
+                    print('You killed the level boss!')
+                else:
+                    print("You killed the enemy!")
+                gamer.xpIncrease(enemy.xp)
+                current_tile.loot += enemy.loot
+                current_tile.enemies.remove(enemy)
+                break
+
+
+            print("You: ", str(gamer))
+            print("Enemy: ", str(enemy))
+            command_s = input('What would you like to do? ').strip().lower().split()
+            if command_s[0] == "help": #prints instructions for player
+                print(helpmsg_c)
+                continue
+
+
+            if command_s[0] == 'attack':
+                player_damage = gamer.damage_dealt()
+                enemy_dead = enemy.damage_taken(player_damage)
+                print('You deal {} damage.'.format(player_damage))
+                if enemy_dead:
+                    continue
+
+            elif command_s[0] == 'consume':
+                print("Consumables in Backpack: ")
+                consumable_list = []
+                for item in gamer.inventory.backpack.binventory:
+                    if item.itemtype == 'Consumable':
+                        consumable_list.append(item.name)
+                        print(item)
+                eat = input("What would you like the consume? ")
+                if eat in consumable_list:
+                    gamer.consume_item(eat)
+                else:
+                    print("Could not find that item")
+                    continue
+
+            else:
+                print('Invalid command')
+                continue
+
+            enemy_damage = enemy.damage_dealt()
+            player_dead = gamer.damage_taken(enemy_damage)
+            print('The {} deals {} damage to you.'.format(enemy.showName(), enemy_damage))
+            if player_dead:
+                continue
         continue
-
-
 
     if action == "equip":
         print("In Backpack: ")
