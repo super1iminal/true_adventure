@@ -103,7 +103,8 @@ You're in combat. Doing any action (except help) will end your turn.
 
 list of combat commands: {}
 Type a combat command to get all possible actions. 
-'''
+'''.format(ccommands)
+
 
 boss_slayed_msg = """
 Congratulations, adventuer! You've slayed the boss!
