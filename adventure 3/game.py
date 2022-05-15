@@ -76,7 +76,7 @@ print("\nyell HELP quick instructions!")
 
 gamer = Player()
 
-mcommands = ("move", "equip", "attack", "loot", "consume", "help", 'continue', "inspect") #main commands
+mcommands = ("move", "equip", "attack", "loot", "consume", "help", 'continue', "inspect", "take", "drop") #main commands
 directions = ('n', 's', 'w', 'e')
 
 helpmsg = '''
@@ -91,7 +91,9 @@ or excute command right away
             V
 
 move + (n,e,s,w)
-e.g. move n'''.format(mcommands)
+e.g. move n
+e.g. inspect floor
+'''.format(mcommands)
 
 ccommands = ('attack', 'consume', 'help')
 
@@ -196,17 +198,47 @@ while True:
 
 
 
-    if action_s[0] == "loot":
-        if len(action_s[0]) == 1:
-            print("x") #CODE TO LIST ALL POSSIBLE LOOTABLE THINGS
-            lootc = input("What would you like to loot? ")
-            #CHECK IF INPUT IS VALID THEN EXCUTE LOOT ACTION
+    if action_s[0] == "take":
+        print(current_tile.showLoot())
+        taken = input("What would you like to pick up? ").lower()
+            
+            
+        checker = 0
+        for item in current_tile.loot:
+            if taken == item.name.lower():
+                gamer.inventory.backpack.add_item(item)
+                current_tile.loot.remove(item)
+                print("Picked up!")
+                checker += 1
+        if checker == 1:
             continue
 
-        lootable = " ".join(action_s[1:])
-        #CHECK IF LOOTABLE THING IS VALID THEN EXECUTE LOOT
-        continue
+        else:
+            print("Could not find that item")
+            continue
 
+
+    if action_s[0] == "drop":
+        print("Inventory:")
+        for item in gamer.inventory.backpack.binventory:
+                print(item)
+        drop = input("Choose item to drop or none: ").lower()
+
+        if drop == "none":
+            continue
+        
+        checker = 0
+        for item in gamer.inventory.backpack.binventory:
+            if drop == item.name.lower():
+                current_tile.loot.append(item)
+                gamer.inventory.backpack.remove_item(item)
+                checker +=1
+                break
+        if checker == 1:
+            continue
+        else:
+            print("Could not find that item")
+            continue
 
 
 
@@ -316,7 +348,7 @@ while True:
             if item.itemtype == 'Consumable':
                 consumable_list.append(item.name)
                 print(item)
-        eat = input("What would you like the consume? ")
+        eat = input("What would you like the consume? ").title()
         if eat in consumable_list:
             gamer.consume_item(eat)
             continue
