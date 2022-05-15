@@ -31,10 +31,8 @@ class Inventory(object):
             raise ValueError('You either do not have that weapon equipped or it is an invalid name')
         elif location!=None:
             for itemtype in self.equipped:
-                print('Itemtype matched')
                 for location in self.equipped[itemtype]:
                     if item_location == location:
-                        print('Item location matched')
                         if self.equipped[itemtype][location]!=None: #if theres actually an item there
                             item = self.equipped[itemtype][location]
                             self.equipped[itemtype][location] = None
@@ -45,38 +43,19 @@ class Inventory(object):
             raise ValueError('Invalid location')
 
     def equip(self, itemname = None,):
+        if itemname == None:
+            raise ValueError('No item name specified to equip')
         item = self.backpack.remove_item(itemname)
-        if item.itemtype == 'Weapons':
-            if self.equipped[item.itemtype]['RHand'] and self.equipped[item.itemtype]['LHand']:
-                print('Both of your hands are equipped: ')
-                print(self.showWeapons())
-                choice = input('What hand would you like to equip the weapon in? (right/left): ').strip().lower()
-                if choice == 'right':
-                    self.backpack.add_item(self.equipped[item.itemtype]['RHand'])
-                    ('{} put in backpack and {} equipped in right hand'.format(self.equipped['Weapons']['RHand'].name, item.name))
-                    self.equipped[item.itemtype]['RHand'] = item
-                if choice == 'left':
-                    self.backpack.add_item(self.equipped[item.itemtype]['LHand'])
-                    ('{} put in backpack and {} equipped in left hand'.format(self.equipped['Weapons']['LHand'].name, item.name))
-                    self.equipped[item.itemtype]['LHand'] = item
-                else:
-                    print('invalid choice')
-            else:
-                if self.equipped[item.itemtype]['RHand']:
-                    print(f'{item.name} equipped in left hand')
-                    self.equipped[item.itemtype]['LHand'] = item
-                else:
-                    print(f'{item.name} equipped in right hand')
-                    self.equipped[item.itemtype]['RHand'] = item
-
-        if item.itemtype == 'Armor':
-            if self.equipped[item.itemtype][item.equipslot] != None:
-                self.backpack.add_item(self.equipped[item.itemtype][item.equipslot])
-                self.equipped[item.itemtype][item.equipslot] = item
-                print('{} put in backpack and {} equipped on {}'.format(self.equipped[item.itemtype][item.equipslot].name, item.name, item.equipslot))
-            else:
-                self.equipped[item.itemtype][item.equipslot] = item
-                print('{} equipped on {}'.format(item.name, item.equipslot))
+        for itemtype in self.equipped:
+            if item.itemtype == itemtype:
+                for location in self.equipped[itemtype]:
+                    if item.equipslot == location:
+                        if self.equipped[itemtype][location] == None:
+                            self.equipped[itemtype][location] = item
+                        else: #if theres already an item equipped just switch it with the one in the backpack
+                            equippeditem = self.equipped[itemtype][location]
+                            self.backpack.add_item(equippeditem)
+                            self.equipped[itemtype][location] = item
 
     def drop(self, itemname, tile):
         tile.loot += [(self.backpack.remove_item(itemname))]

@@ -92,7 +92,7 @@ class Backpack(Items):
 
         
 class Weapon(Items):
-    itemtype = 'Weapons'
+    itemtype = 'Weapon'
     def __init__(self, itemname = "Weapon", stage = 5, damage = None):
         from random import randint
         self.name = itemname

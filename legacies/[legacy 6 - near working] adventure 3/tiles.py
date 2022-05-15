@@ -18,7 +18,7 @@ class Level(object):
             #generating enemies. temporary until enemies are actually coded
             self.enemies = list()
             if tiletype=='Enemy':
-                for _ in range(randint(1, stage+1)):
+                for _ in range(randint(0, stage+1)):
                     self.enemies.append(enemyMaker(stage))
             elif tiletype == 'Boss':
                 self.enemies.append(enemyMaker(stage, "Boss"))

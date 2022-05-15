@@ -8,6 +8,65 @@ from combat import *
 """
 
 
+read me
+
+
+
+this is good :)
+
+you should also add a look command. im eventually gonna change inventory repr to just print item names, so you'd need to look at an item to see its stats
+also able to look at enemies to see their stats so u can see if u can beat them before u attack
+also if there are enemies we can either be locked into fighting them or we can make it so that we're able to go back to the tile that we came from. your choice.
+to find the tile we came from, just keep track of previous_tile as well as current_tile. if the current_tile.paths[direction] == previous_tile, let the player do it
+
+i made enemies fully working btw. 
+ 
+**************FROM PANA******************
+-i think we should keep things as simple as possible for now until we get a working, submitable game
+i dont want to stress over this too much tmrw since i got a final exam on monday
+-i think the look command should be called "inspect"
+<3 u asher, also <3 u hien
+*****************************************
+
+ok I made combat fully working. enemies drop items into current_tile.loot now. no looting yet, but here's what i'm thinking: instead of 'loot' we just have an action called look.
+
+look has 3 main components:
+look inventory: checks your inventory and equipment player.showLoot()
+look enemy: looks at an enemy's loot. enemy.showLoot()
+look ground: looks at ground an enables looting. current_tile.showLoot()
+
+****i made all the show loot stuff already so just implement it in the game
+
+
+YOU ALSO need to make it so that the player is able to pick up items and put them in the backpack from the ground.
+    make a new command called take
+    make it seperate from the look command or implement it if the player looks at the ground idc
+    make the take command remove an item from the current_tile by name - look at my other code for adding and removing code by name to figure this out if u dont know how
+            for this you don't need to make a method in any other files, you can do it from this file only
+    and then put that item in the backpack by doing inventory.backpack.add_item(item) or whatever
+
+i also made it so if u beat the boss u can write continue to go to next level
+
+i also made it so that u level up
+
+i also made it so that u have to kill all enemies in a tile before u can continue
+
+THEN WE'RE DONE BABY
+
+**************************
+insect command is down, now doing take
+
+
+
+
+
+
+
+
+
+
+
+
 """
 #here is where you'll get all the inputs and interpret them
 
@@ -104,7 +163,7 @@ while True:
             print('There are enemies. You must kill them to move on.')
             continue
 
-        if len(action_s) == 1: 
+        if len(action_s[0]) == 1: 
             dir = input("In which direction do you move? ")
             if dir in directions:
                 if current_tile.paths[dir]!=None:
@@ -123,7 +182,7 @@ while True:
                     continue
 
         
-        elif action_s[1] in directions:
+        if action_s[1] in directions:
             if current_tile.paths[action_s[1]]!=None:
                 if current_tile.paths[action_s[1]].tiletype == 'Boss':
                     yn = input('Warning! That tile is the boss! Do you still want to continue? y/n\n')
@@ -141,6 +200,9 @@ while True:
         else:
             print("Invalid direction")
             continue
+
+
+
 
     if action_s[0] == "take":
         if len(action_s) == 1:
@@ -164,17 +226,17 @@ while True:
 
 
     if action_s[0] == "drop":
-        if len(action_s) == 1:
-            print("Inventory:")
-            print(gamer.inventory.showBackpack())
-            drop = input("Choose item to drop or none: ").lower()
-        else:
-            drop = " ".join(action_s[1:])
+        print("Inventory:")
+        for item in gamer.inventory.backpack.binventory:
+            print(item)
+        drop = input("Choose item to drop or none: ").lower()
+        if drop == "none":
+            continue
         checker = 0
         for item in gamer.inventory.backpack.binventory:
             if drop == str(item.name).lower():
                 gamer.inventory.drop(item.name, current_tile)
-                print('Dropping {}'.format(item.name))
+                print('Removing {}'.format(item.name))
                 checker +=1
                 break
         if checker == 1:
@@ -265,28 +327,25 @@ while True:
                 continue
         continue
 
-    if action_s[0] == "equip":
-        if len(action_s) == 1:
-            print("In Backpack: ")
-            print(gamer.inventory.showBackpack())
-            equipc = input("What would you like to equip?: ").lower()
-        else:
-            equipc = " ".join(action_s[1:])
-        checker = 0
+    if action == "equip":
+        print("In Backpack: ")
         for item in gamer.inventory.backpack.binventory:
-            if equipc == str(item.name).lower():
-                if item.itemtype == 'Armor' or item.itemtype == 'Weapons':
-                    checker += 1
-                    gamer.inventory.equip(item.name)
+            print(item)
+        equipc = input("What would you like to equip? ")
+        for item in gamer.inventory.backpack.binventory:
+            if equipc == item.name:
+            
+                if (type(equipc) is Armor) or (type(equipc) is Weapon):
+                    gamer.inventory.equip(equipc)
                     continue
                     
                 else:
                     print("Could not equip that item")
-                    checker += 1
                     continue
                 
-        if checker == 0:
-            print('Could not find that item')
+            else:
+                print("Could not find that item")
+                continue
 
 
     
@@ -311,13 +370,34 @@ while True:
 
     if action_s[0] == "inspect":
         if len(action_s) > 1:
-            inspected = " ".join(action_s[1:])
-        else:
-            inspected = input("Inventory, Enemy, Floor or Self? ").lower()
+            if action_s[1] == "floor":
+                print(current_tile.showLoot())
+                continue
+
+            if action_s[1] == "inventory":
+                print(gamer.showLoot())
+                continue
+                
+            checker = 0
+            for e in current_tile.enemies:
+                if " ".join(action_s[1:]) == e.name.lower():
+                    print(e.showLoot())
+                    checker += 1
+                    break
+            if checker == 1:
+                continue
+                
+            else:
+                print("Could not inspect")
+                continue
+        
+
+
+        inspected = input("Inventory, Enemy, or  Floor? ").lower()
         if inspected == "inventory":
             print(gamer.showLoot())
             continue
-        elif inspected == "enemy":
+        if inspected == "enemy":
             print("Enemies in tile: ")
             for e in current_tile.enemies:
                 print(e.name)
@@ -333,14 +413,9 @@ while True:
             else:
                 print("Could not find that enemy")
                 continue
-        elif inspected == "floor":
+        if inspected == "floor":
             print(current_tile.showLoot())
             continue
-        
-        elif inspected == 'self':
-            print(str(gamer))
-            continue
-
 
 
 
