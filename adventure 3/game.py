@@ -222,17 +222,15 @@ while True:
     if action_s[0] == "drop":
         print("Inventory:")
         for item in gamer.inventory.backpack.binventory:
-                print(item)
+            print(item)
         drop = input("Choose item to drop or none: ").lower()
-
         if drop == "none":
             continue
-        
         checker = 0
         for item in gamer.inventory.backpack.binventory:
-            if drop == item.name.lower():
-                current_tile.loot.append(item)
-                gamer.inventory.backpack.remove_item(item)
+            if drop == str(item.name).lower():
+                gamer.inventory.drop(item.name, current_tile)
+                print('Removing {}'.format(item.name))
                 checker +=1
                 break
         if checker == 1:
@@ -271,6 +269,8 @@ while True:
                     print('You killed the level boss!')
                 else:
                     print("You killed the enemy!")
+                if enemy.loot:
+                    print('The enemy dropped some loot.')
                 gamer.xpIncrease(enemy.xp)
                 current_tile.loot += enemy.loot
                 current_tile.enemies.remove(enemy)
@@ -302,6 +302,7 @@ while True:
                 eat = input("What would you like the consume? ")
                 if eat in consumable_list:
                     gamer.consume_item(eat)
+                    print('{} Consumed!'.format(eat))
                 else:
                     print("Could not find that item")
                     continue
@@ -349,9 +350,13 @@ while True:
             if item.itemtype == 'Consumable':
                 consumable_list.append(item.name)
                 print(item)
+        if len(consumable_list) == 0:
+            print('You do not have any consumables.')
+            continue
         eat = input("What would you like the consume? ").title()
         if eat in consumable_list:
             gamer.consume_item(eat)
+            print(f'{eat} consumed!')
             continue
         else:
             print("Could not find that item")
@@ -366,7 +371,7 @@ while True:
             if action_s[1] == "inventory":
                 print(gamer.showLoot())
                 continue
-
+                
             checker = 0
             for e in current_tile.enemies:
                 if " ".join(action_s[1:]) == e.name.lower():

@@ -28,7 +28,10 @@ class Level(object):
             self.location = location
             self.pathto = pathto
         def __str__(self): #works
-            rep = "| Location: {} | Type: {} | ".format(self.location, self.tiletype)
+            rep = ''
+            if self.tiletype!='Start':
+                rep += '| Location: {} '.format(self.location)
+            rep += "| Type: {} | ".format(self.tiletype)
             rep += "Enemies: "
             if self.enemies:
                 for enemy in self.enemies:

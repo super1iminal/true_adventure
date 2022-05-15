@@ -76,7 +76,7 @@ class Player(object):
         return str(self.maxhealth)
 
     def showDamage(self):
-        return str(self.bdamage) + int(self.inventory.weapon_damage())
+        return str(int(self.bdamage) + int(self.inventory.weapon_damage()))
 
     def showResistance(self):
         return str(self.inventory.armor_resistance())
@@ -85,4 +85,4 @@ class Player(object):
         return str(self.name)
 
     def __str__(self):
-        return '| {} | Level: {} | MHealth: {} | CHealth: {} | Damage: {} | Resistance: {}'.format(self.name, self.level, self.maxhealth, self.health, self.bdamage, self.showDamage(), self.showResistance)
+        return '| {} | Level: {} | MHealth: {} | CHealth: {} | Damage: {} | Resistance: {}'.format(self.name, self.level, self.maxhealth, self.health, self.showDamage(), self.showResistance())

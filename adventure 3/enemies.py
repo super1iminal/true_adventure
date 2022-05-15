@@ -17,13 +17,13 @@ class Enemy(object):
             multiplier = stage + 3
             self.resistance = randint(0, stage+2)
         self.health = randint(1, stage+3) + multiplier
-        self.damage = randint(1, stage+1) + multiplier
+        self.damage = randint(3, stage+3) + multiplier
         self.xp = self.health + self.damage
 
         #loot creater
         from items import weaponMaker, armorMaker, consumableMaker
         self.loot = list()
-        for _ in range(randint(0, stage + (multiplier))):
+        for _ in range(randint(1, stage + (multiplier))):
             choice = randint(1,3)
             if choice==1:
                 self.loot.append(weaponMaker(stage))
@@ -43,7 +43,7 @@ class Enemy(object):
             return rep
         else:
             for loot in self.loot:
-                rep += "\n" + str(loot)
+                rep += "\n-" + str(loot)
         return rep
 
 
