@@ -45,6 +45,12 @@ YOU ALSO need to make it so that the player is able to pick up items and put the
             for this you don't need to make a method in any other files, you can do it from this file only
     and then put that item in the backpack by doing inventory.backpack.add_item(item) or whatever
 
+i also made it so if u beat the boss u can write continue to go to next level
+
+i also made it so that u level up
+
+i also made it so that u have to kill all enemies in a tile before u can continue
+
 THEN WE'RE DONE BABY
 
 
@@ -264,6 +270,9 @@ while True:
                 else:
                     print("Could not find that item")
                     continue
+
+            elif command_s[0] == 'wait':
+                print('Okay...')
 
             else:
                 print('Invalid command')

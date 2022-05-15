@@ -31,7 +31,9 @@ class Player(object):
 
     def damage_taken(self, true_damage):
         """Deals damage to the player. Returns boolean of if the player is dead or not"""
-        self.health = self.health - (true_damage - self.inventory.armor_resistance())
+        actual_damage = true_damage - self.inventory.armor_resistance()
+        if actual_damage>0:
+            self.health = self.health - actual_damage
         return self.is_dead()
 
         
