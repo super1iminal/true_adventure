@@ -83,14 +83,20 @@ class Level(object):
 
 
     def __init__(self, stage): #stage will start at 1
-        self.center_tile = Level.Tile(tiletype = "Start", stage = stage)
         self.stage = stage
         self.maxdepth = 3
-        self.n_tiles = 1
-        self.locations = {'':'',}
-        self.path_to_boss = ''
-        self.r_generate()
         self.boss_slayed = False
+
+        #generator
+        self.n_tiles = 1
+        if self.n_tiles<3:
+            self.path_to_boss = ''
+            self.locations = {'':'',}
+            self.n_tiles = 1
+            self.center_tile = Level.Tile(tiletype = "Start", stage = stage)
+            self.r_generate()
+
+        
         
         #number of iterations around center
 
@@ -153,10 +159,8 @@ class Level(object):
             from random import randint
             nonlocal maxDepth
             if depth == maxDepth:
-                print('Max Depth Reached. Returning')
                 return
             else:
-                print("Generating...")
                 for path in tile.paths:
                     if tile.paths[path] == None and randint(0,1) == 1:
                         location_next = Level.Tile.locationparser(tile.location + path) #staticmethod so valid
@@ -186,7 +190,6 @@ class Level(object):
             direction = directions[randint(0,3)]
             if (Level.Tile.locationparser(current_tile.location + direction) not in self.locations) and (current_tile.paths[direction]==None): #the first part should be enough but just to be safe i'll add the and none whatever
                 current_tile.paths[direction] = Level.Tile(direction, current_tile, Level.Tile.locationparser(current_tile.location + direction), current_tile.pathto + direction, tiletype='Boss', stage = self.stage)
-                print('Boss created!')
                 self.path_to_boss = current_tile.pathto + direction
                 break
             elif current_tile.paths[direction]!=None:
