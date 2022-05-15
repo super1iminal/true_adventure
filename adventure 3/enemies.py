@@ -61,7 +61,8 @@ class Enemy(object):
         actual_damage = true_damage - self.resistance
         if actual_damage > 0:
             self.health = self.health - actual_damage
-        return self.is_dead()
+            return actual_damage
+        return 0
 
     def showHealth(self):
         return str(self.health)

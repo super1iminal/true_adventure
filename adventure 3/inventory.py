@@ -58,7 +58,7 @@ class Inventory(object):
                             self.equipped[itemtype][location] = item
 
     def drop(self, itemname, tile):
-        tile.loot.append(self.backpack.remove_item(itemname))
+        tile.loot += [(self.backpack.remove_item(itemname))]
 
     def weapon_damage(self):
         damage = 0

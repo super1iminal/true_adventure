@@ -286,9 +286,9 @@ while True:
 
             if command_s[0] == 'attack':
                 player_damage = gamer.damage_dealt()
-                enemy_dead = enemy.damage_taken(player_damage)
-                print('You deal {} damage.'.format(player_damage))
-                if enemy_dead:
+                enemy_damage_taken = enemy.damage_taken(player_damage)
+                print('You deal {} damage.'.format(enemy_damage_taken))
+                if enemy.is_dead():
                     continue
 
             elif command_s[0] == 'consume':
@@ -313,9 +313,9 @@ while True:
                 continue
 
             enemy_damage = enemy.damage_dealt()
-            player_dead = gamer.damage_taken(enemy_damage)
-            print('The {} deals {} damage to you.'.format(enemy.showName(), enemy_damage))
-            if player_dead:
+            player_damage_taken = gamer.damage_taken(enemy_damage)
+            print('The {} deals {} damage to you.'.format(enemy.showName(), player_damage_taken))
+            if gamer.is_dead():
                 continue
         continue
 

@@ -34,7 +34,8 @@ class Player(object):
         actual_damage = true_damage - self.inventory.armor_resistance()
         if actual_damage>0:
             self.health = self.health - actual_damage
-        return self.is_dead()
+            return actual_damage
+        return 0
 
         
 
@@ -84,4 +85,4 @@ class Player(object):
         return str(self.name)
 
     def __str__(self):
-        return '| {} | Level: {} | Max Health: {} | Current Health: {} | Base Damage: {} | Total Damage with Weapons: {} |'.format(self.name, self.level, self.maxhealth, self.health, self.bdamage, self.damage_dealt())
+        return '| {} | Level: {} | MHealth: {} | CHealth: {} | Damage: {} | Resistance: {}'.format(self.name, self.level, self.maxhealth, self.health, self.bdamage, self.showDamage(), self.showResistance)

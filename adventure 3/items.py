@@ -68,12 +68,11 @@ class Backpack(Items):
         self.binventory += [item]
 
     def remove_item(self, itemname): 
-        if len(self.binventory) == 0:
-            raise ValueError('Binventory underflow')
         for item in self.binventory:
-            if item.name.lower() == itemname.lower():
+            if str(item.name).lower() == str(itemname).lower():
                 self.binventory.remove(item)
                 return item
+        return None
 
     def is_over(self):
         if len(self.binventory) > self.size:
