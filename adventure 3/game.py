@@ -2,6 +2,8 @@ from items import *
 from player import *
 from inventory import *
 from tiles import *
+from enemies import *
+from combat import *
 
 """
 
@@ -47,41 +49,40 @@ print("\nyell HELP quick instructions!")
 gamer = Player()
 
 
-mcommands = ["move", "equip", "attack", "loot", "consume", "HELP"] #main commands
+mcommands = ("move", "equip", "attack", "loot", "consume", "HELP") #main commands
 directions = ('n', 's', 'w', 'e')
+
+helpmsg = '''
+list of main commands: {}
+
+type a main command to get all possible actions
+
+or excute command right away
+
+            |
+            |
+            V
+
+move + (n,e,s,w)
+e.g. move n'''
+
+
 
 level = Level(1)
 current_tile = level.center_tile
 
 while True:
-    
-    print(current_tile)
-            
+    print("You're here: ", str(current_tile))
 
-    action = input("\nWhat would you like to do? ").lower()
-
+    action = input("\nWhat would you like to do? ").strip().lower()
     action_s = action.split()
-    if not action_s[0] in mcommands:
+
+    if action_s[0] not in mcommands:
         print("Invalid command")
         continue
 
-    if action == "help": #prints instructions for player
-        helper = '''
-
-        list of commands: [move, equip, attack, loot, consume]
-        
-        just type a command to get all possible actions
-        
-        or excute command right away
-
-        |
-        |
-        V
-
-        move: DIRECTION (n,e,s,w)
-        e.g. move n
-        '''
-        print(helper)
+    if action_s[0] == "help": #prints instructions for player
+        print(helpmsg)
         continue
 
 
@@ -90,11 +91,8 @@ while True:
         if gamer.inventory.backpack.is_over():
             print("You are too heavy to move, empty some of your inventory")
             continue
-        
 
-    
-        if action == "move": 
-
+        if len(action_s[0]) == 1: 
             dir = input("In which direction do you move? ")
             if dir in directions:
                 if current_tile.paths[dir]!=None:
@@ -122,7 +120,7 @@ while True:
 
 
     if action_s[0] == "loot":
-        if action == "loot":
+        if len(action_s[0]) == 1:
             print("x") #CODE TO LIST ALL POSSIBLE LOOTABLE THINGS
             lootc = input("What would you like to loot? ")
             #CHECK IF INPUT IS VALID THEN EXCUTE LOOT ACTION
@@ -171,21 +169,19 @@ while True:
 
     
     if action == "consume":
-        print("In Backpack: ")
+        print("Consumables in Backpack: ")
+        consumable_list = []
         for item in gamer.inventory.backpack.binventory:
-            print(item)
+            if item.itemtype == 'Consumable':
+                consumable_list.append(item.name)
+                print(item)
         eat = input("What would you like the consume? ")
-        for item in gamer.inventory.backpack.binventory:
-            if eat == item.name:
-                if type(eat) is Consumable:
-                    gamer.inventory.equip(equipc)
-                    continue
-                else:
-                    print("Could not consume that item")
-                    continue
-            else:
-                print("Could not find that item")
-                continue
+        if eat in consumable_list:
+            gamer.consume_item(eat)
+            continue
+        else:
+            print("Could not find that item")
+            continue
 
 
 

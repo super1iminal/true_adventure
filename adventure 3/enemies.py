@@ -18,6 +18,7 @@ class Enemy(object):
             self.resistance = randint(0, stage+2)
         self.health = randint(1, stage+3) + multiplier
         self.damage = randint(1, stage+1) + multiplier
+        self.xp = self.health + self.damage
 
         #loot creater
         from items import weaponMaker, armorMaker, consumableMaker
@@ -56,6 +57,18 @@ class Enemy(object):
         self.health = self.health - (true_damage - self.resistance)
         self.resistance - 1
         return self._is_dead()
+
+    def showHealth(self):
+        return str(self.health)
+
+    def showDamage(self):
+        return str(self.damage)
+
+    def showName(self):
+        return str(self.name)
+
+    def showResistance(self):
+        return str(self.resistance)
 
     
         
