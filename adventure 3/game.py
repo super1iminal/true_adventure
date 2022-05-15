@@ -76,7 +76,7 @@ print("\nyell HELP quick instructions!")
 
 gamer = Player()
 
-mcommands = ("move", "equip", "attack", "loot", "consume", "help", 'continue', "inspect", "take", "drop") #main commands
+mcommands = ("move", "equip", "attack", "consume", "help", 'continue', "inspect", "take", "drop") #main commands
 directions = ('n', 's', 'w', 'e')
 
 helpmsg = '''
@@ -103,7 +103,8 @@ You're in combat. Doing any action (except help) will end your turn.
 
 list of combat commands: {}
 Type a combat command to get all possible actions. 
-'''
+'''.format(ccommands)
+
 
 boss_slayed_msg = """
 Congratulations, adventuer! You've slayed the boss!
