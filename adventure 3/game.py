@@ -114,6 +114,8 @@ Congratulations, adventuer! You've slayed the boss!
 
 level = Level(1)
 current_tile = level.center_tile
+print(str(current_tile))
+
 
 while True:
     if gamer.is_dead():
@@ -126,8 +128,6 @@ while True:
         else:
             print('Thanks for playing!')
             break
-
-    print(str(current_tile))
 
     action = input("\nWhat would you like to do? ").strip().lower()
     action_s = action.split()
@@ -175,6 +175,7 @@ while True:
                         else:
                             print('Good luck.')
                     current_tile = current_tile.paths[dir]
+                    print(str(current_tile))
                     continue
                 else:
                     print("You can't go that way!")
@@ -191,6 +192,7 @@ while True:
                     else:
                         print('Good luck.')
                 current_tile = current_tile.paths[action_s[1]]
+                print(str(current_tile))
                 continue
             else:
                 print("You can't go that way!")
