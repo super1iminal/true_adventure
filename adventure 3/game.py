@@ -76,7 +76,7 @@ print("\nyell HELP quick instructions!")
 
 gamer = Player()
 
-mcommands = ("move", "equip", "attack", "loot", "consume", "help", 'continue', "inspect", "take", "drop") #main commands
+mcommands = ("move", "equip", "attack", "consume", "help", 'continue', "inspect", "take", "drop") #main commands
 directions = ('n', 's', 'w', 'e')
 
 helpmsg = '''
