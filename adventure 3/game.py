@@ -76,7 +76,7 @@ print("\nyell HELP quick instructions!")
 
 gamer = Player()
 
-mcommands = ("move", "equip", "attack", "consume", "help", 'continue', "inspect", "take", "drop") #main commands
+mcommands = ("move", "equip", "attack", "consume", "help", 'continue', "inspect", "take", "drop", 'location') #main commands
 directions = ('n', 's', 'w', 'e')
 
 helpmsg = '''
@@ -139,6 +139,9 @@ while True:
     if action_s[0] == "help": #prints instructions for player
         print(helpmsg)
         continue
+    
+    if action_s[0] == 'location':
+        print(str(current_tile))
 
     if action_s[0] == 'continue':
         if level.boss_slayed:
@@ -200,10 +203,11 @@ while True:
 
 
     if action_s[0] == "take":
-        print(current_tile.showLoot())
-        taken = input("What would you like to pick up? ").lower()
-            
-            
+        if len(action_s) == 1:
+            print(current_tile.showLoot())
+            taken = input("What would you like to pick up? ").lower()
+        else:
+            taken = " ".join(action_s[1:])
         checker = 0
         for item in current_tile.loot:
             if taken == item.name.lower():
