@@ -53,6 +53,8 @@ i also made it so that u have to kill all enemies in a tile before u can continu
 
 THEN WE'RE DONE BABY
 
+**************************
+insect command is down, now doing take
 
 
 
@@ -74,7 +76,7 @@ print("\nyell HELP quick instructions!")
 
 gamer = Player()
 
-mcommands = ("move", "equip", "attack", "loot", "consume", "help", 'continue') #main commands
+mcommands = ("move", "equip", "attack", "loot", "consume", "help", 'continue', "inspect") #main commands
 directions = ('n', 's', 'w', 'e')
 
 helpmsg = '''
@@ -321,6 +323,58 @@ while True:
         else:
             print("Could not find that item")
             continue
+
+    if action_s[0] == "inspect":
+        if len(action_s) > 1:
+            if action_s[1] == "floor":
+                print(current_tile.showLoot())
+                continue
+
+            if action_s[1] == "inventory":
+                print(gamer.showLoot())
+                continue
+
+            checker = 0
+            for e in current_tile.enemies:
+                if " ".join(action_s[1:]) == e.name.lower():
+                    print(e.showLoot())
+                    checker += 1
+                    break
+            if checker == 1:
+                continue
+                
+            else:
+                print("Could not inspect")
+                continue
+        
+
+
+        inspected = input("Inventory, Enemy, or  Floor? ").lower()
+        if inspected == "inventory":
+            print(gamer.showLoot())
+            continue
+        if inspected == "enemy":
+            print("Enemies in tile: ")
+            for e in current_tile.enemies:
+                print(e.name)
+            enem = input("Inspect which enemy? ")
+            checker = 0
+            for e in current_tile.enemies:
+                if enem == e.name:
+                    print(e.showLoot())
+                    checker += 1
+                    break
+            if checker == 1:
+                continue
+            else:
+                print("Could not find that enemy")
+                continue
+        if inspected == "floor":
+            print(current_tile.showLoot())
+            continue
+
+
+
 
 
 
