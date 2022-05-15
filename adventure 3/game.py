@@ -36,7 +36,7 @@ e.g. move n
 e.g. inspect floor
 '''.format(mcommands)
 
-ccommands = ('attack', 'consume', 'help')
+ccommands = ('attack', 'consume', 'help') #combat commands
 
 
 helpmsg_c = '''
@@ -81,10 +81,10 @@ while True:
         print(helpmsg)
         continue
     
-    if action_s[0] == 'location':
+    if action_s[0] == 'location': #prints current location
         print(str(current_tile))
 
-    if action_s[0] == 'continue':
+    if action_s[0] == 'continue': #to advance to next level
         if level.boss_slayed:
             print('Good luck on the next level!')
             current_stage = level.stage
@@ -95,7 +95,7 @@ while True:
             print("You haven't beat the boss yet!")
             continue
 
-    if action_s[0] == "move":
+    if action_s[0] == "move": #to move between tiles
         if gamer.inventory.backpack.is_over():
             print("You are too heavy to move, empty some of your inventory")
             continue
@@ -142,7 +142,7 @@ while True:
             print("Invalid direction")
             continue
 
-    if action_s[0] == "take":
+    if action_s[0] == "take": #to pick up loot from floor
         if len(action_s) == 1:
             print(current_tile.showLoot())
             taken = input("What would you like to pick up? ").lower()
@@ -163,7 +163,7 @@ while True:
             continue
 
 
-    if action_s[0] == "drop":
+    if action_s[0] == "drop": #to drop item from inventory onto floor
         if len(action_s) == 1:
             print("Inventory:")
             print(gamer.inventory.showBackpack())
@@ -265,7 +265,7 @@ while True:
                 continue
         continue
 
-    if action_s[0] == "equip":
+    if action_s[0] == "equip": #to equip armor or weapon
         if len(action_s) == 1:
             print("In Backpack: ")
             print(gamer.inventory.showBackpack())
@@ -290,7 +290,7 @@ while True:
 
 
     
-    if action == "consume":
+    if action == "consume": #to eat food and heal
         print("Consumables in Backpack: ")
         consumable_list = []
         for item in gamer.inventory.backpack.binventory:
