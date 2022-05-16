@@ -103,36 +103,8 @@ class Level(object):
             self.center_tile = Level.Tile(tiletype = "Start", stage = stage)
             self.r_generate()
 
-        
-        
-        #number of iterations around center
-
     def __str__(self):
-        #basically, I need this to go through every tile recursively
-        # this is like a virus, if a tile has already been 'infected' (visited), then skip it. the problem is, i need a central data storage,
-        # here it's visited locations, to store the data of where the virus has been
         return "Number of tiles: {}".format(str(self.n_tiles)) + "\nPath to boss: {}".format(self.path_to_boss) 
-        """      
-        def all_visited(tile, v_locations):
-            v_counter = 0
-            for path in tile.paths:
-                if Level.Tile.locationparser(path + tile.location) in v_locations or tile.paths[path]==None:
-                    v_counter += 1
-            if v_counter == 4:
-                return True
-            else: return False
-        repre = ''
-        visited_locations = ['',]
-        def strHelper(tile):
-            nonlocal visited_locations
-            nonlocal repre
-            repre += (str(tile) + "\n" )
-            for path in tile.paths:
-                if tile.paths[path]!=None and (Level.Tile.locationparser(tile.location + path) not in visited_locations):
-                    visited_locations += [Level.Tile.locationparser(tile.location + path)] #adding location of tile currently about to expand into to repetoire
-                    strHelper(tile.paths[path])
-        strHelper(self.center_tile)
-        return repre"""
         
 
     @staticmethod

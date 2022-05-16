@@ -66,7 +66,7 @@ class Backpack(Items):
         from random import randint
         from math import exp
         self.name = itemname
-        self.size = randint(1, stage+5) #number between blah and blah, inclusive
+        self.size = randint(4, stage+5) #number between blah and blah, inclusive
         self.binventory = list()
         if starteritem:
             self.binventory = self.binventory + [starteritem]
@@ -86,16 +86,6 @@ class Backpack(Items):
             return True
         else:
             return False
-    
-    def __str__(self):
-        rep = "| {} | Slot: {} | Charmslots: {} | Resistance: {} |"
-        if self.charmslots>0:
-            rep += 'Charms: \n'
-            for charm in self.charms:
-                rep += str(charm) + '\n'
-        rep += 'Items: \n'
-        for item in self.binventory:
-            rep += str(item) + '\n'
 
         
 class Weapon(Items):

@@ -66,7 +66,7 @@ print(str(current_tile))
 
 while True:
     if gamer.is_dead():
-        tryagain = input('Game Over! Try again? y/n\n').strip().lower()
+        tryagain = input(f'Game Over! You killed {gamer.enemies_killed} enemies. Try again? y/n\n').strip().lower()
         if tryagain == "y":
             gamer = Player()
             level = Level(1)
@@ -221,6 +221,7 @@ while True:
                     print("You killed the enemy!")
                 if enemy.loot:
                     print('The enemy dropped some loot.')
+                gamer.enemies_killed += 1
                 gamer.xpIncrease(enemy.xp)
                 current_tile.loot += enemy.loot
                 current_tile.enemies.remove(enemy)
