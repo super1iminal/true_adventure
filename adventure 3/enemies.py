@@ -71,6 +71,7 @@ class Enemy(object):
 
     def damage_taken(self, true_damage):
         """Deals damage to the enemy. Returns boolean of if the enemy is dead or not"""
+        self.resistance += -1
         actual_damage = true_damage - self.resistance
         if actual_damage > 0:
             self.health = self.health - actual_damage
