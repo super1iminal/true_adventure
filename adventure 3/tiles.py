@@ -35,6 +35,7 @@ class Level(object):
             self.location = location
             self.pathto = pathto
         def __str__(self): #works
+            """Returns a string with the tiletype, location (if tiltype not Start), enemies, paths you can take from the tile, and the path to get to the tile from Start"""
             rep = ''
             if self.tiletype!='Start':
                 rep += '| Location: {} '.format(self.location)
@@ -52,14 +53,10 @@ class Level(object):
             rep += "| PathTo: {}".format(self.pathto)
 
             return rep
-        def __add__(self, other):
-            if len(self.enemies)>len(other.enemies):
-                return self
-            else:
-                return other
 
         @staticmethod
         def locationparser(location):
+            """Turns an extended location into a compressed one"""
             directions_l = []
             for direction in location:
                 antidirection = Level.Tile.antipath(direction)
@@ -71,6 +68,7 @@ class Level(object):
 
         @staticmethod
         def antipath(path):
+            """Returns the opposite of a cardinal direction"""
             for pathpair in [['n', 's'], ['e','w']]:
                 if path in pathpair:
                     pathpair.remove(path)
@@ -78,6 +76,7 @@ class Level(object):
             raise ValueError('No such path exists')
 
         def showLoot(self):
+            """Returns a string of the tile's loot"""
             rep = "Tile's loot: "
             if len(self.loot)==0:
                 rep += 'None.'
@@ -90,6 +89,7 @@ class Level(object):
 
 
     def __init__(self, stage): #stage will start at 1
+        """Intializes a level's stage, maxdepth, boss slayed state, and number of tiles. Also generates a level, initializes path to boss, locations, center tile"""
         self.stage = stage
         self.maxdepth = 3
         self.boss_slayed = False
@@ -104,16 +104,13 @@ class Level(object):
             self.r_generate()
 
     def __str__(self):
+        """Returns the number of tiles in a level and the path to the boss."""
         return "Number of tiles: {}".format(str(self.n_tiles)) + "\nPath to boss: {}".format(self.path_to_boss) 
         
 
     @staticmethod
-    def tilecounter(tile):
-        pass
-
-    @staticmethod
     def is_deadend(tile):
-        """Checks if a tile is a dead end or not"""
+        """Checks if a tile is a dead end or not. Unused"""
         pathcounter = Level.n_paths_out(tile)
         if pathcounter == 1 and tile.direction_to_previous != None:
             return True
@@ -131,10 +128,12 @@ class Level(object):
 
             
     def r_generate(self):
+        """Generates a level based on the initialized max depth and starting tile. Also creates boss room."""
         startingTile = self.center_tile
         startingDepth = 0
         maxDepth = self.maxdepth
         def _r_generate(tile, depth):
+            """Recursively generates a level."""
             from random import randint
             nonlocal maxDepth
             if depth == maxDepth:
@@ -173,17 +172,6 @@ class Level(object):
                 break
             elif current_tile.paths[direction]!=None:
                 current_tile = current_tile.paths[direction]
-            
-            
-
-    @staticmethod
-    def tile_from_direction(tile, direction):
-        return tile.paths[direction]
-
-
-
-
-#we know have a level generator that generates a tile map, starting with the center tile and going outwards from there. 
 
 
         

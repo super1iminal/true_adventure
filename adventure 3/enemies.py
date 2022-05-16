@@ -14,6 +14,7 @@ def enemyMaker(stage, en_type = 'Enemy'):
 
 class Enemy(object):
     def __init__(self, name, stage, en_type = "Enemy"):
+        """Create an enemy, initializes typem name, health, damage, xp reward, and loot"""
         from random import randint
         self.en_type = en_type
         self.name = name
@@ -42,9 +43,11 @@ class Enemy(object):
                 self.loot.append(armorMaker(stage, location))
     
     def __str__(self):
-        return "{} (Health: {}, Damage: {})".format(self.name, self.health, self.damage)
+        """Returns a string of enemy name, health, damage and resistance"""
+        return "{} (Health: {}, Damage: {}, Resistance: {})".format(self.name, self.health, self.damage, self.resistance)
 
     def showLoot(self):
+        """Returns a list of the enemy's loot"""
         rep = "{}'s loot: ".format(self.name)
         if len(self.loot)==0:
             rep += 'None.'
@@ -56,16 +59,18 @@ class Enemy(object):
 
 
     def is_dead(self):
+        """Returns a boolean as to if the enemy is dead or not. True if dead"""
         if self.health<=0:
             return True
         else:
             return False
         
     def damage_dealt(self):
+        """Returns an integer of the damage the enemy deals"""
         return int(self.damage)
 
     def damage_taken(self, true_damage):
-        """Deals damage to the player. Returns boolean of if the enemy is dead or not"""
+        """Deals damage to the enemy. Returns boolean of if the enemy is dead or not"""
         actual_damage = true_damage - self.resistance
         if actual_damage > 0:
             self.health = self.health - actual_damage
@@ -73,15 +78,19 @@ class Enemy(object):
         return 0
 
     def showHealth(self):
+        """Returns a string of the enemy's health"""
         return str(self.health)
 
     def showDamage(self):
+        """Returns a string of the enemy's damage"""
         return str(self.damage)
 
     def showName(self):
+        """Returns a string of the enemy's name"""
         return str(self.name)
 
     def showResistance(self):
+        """Returns a string of the enemy's resistance"""
         return str(self.resistance)
 
     

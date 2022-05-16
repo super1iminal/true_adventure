@@ -6,6 +6,7 @@ Final Project
 """
 
 def _adjective_gen(n_adjectives = 2):
+    """Generates 0 or more adjectives"""
     from random import randint
     adjectives = ''
     adj = open ('words/adjectives.txt')
@@ -20,6 +21,7 @@ def _adjective_gen(n_adjectives = 2):
     return adjectives
 
 def weapon_gen():
+    """Generates a weapon name"""
     from random import randint
     weapon_name = ''
     fp = open('words/weapons.txt')
@@ -31,6 +33,7 @@ def weapon_gen():
     return weapon_name
 
 def armor_gen(location):
+    """Generates an armor name based on armor location"""
     """Head, Torso, Arms, Legs"""
     from random import randint
     location_to_ind = {'Head':0, 'Torso':1, 'Arms':2, 'Legs':3}
@@ -46,6 +49,7 @@ def armor_gen(location):
 
 
 def consumable_gen():
+    """Generates a consumable name"""
     from random import randint
     fp = open('words/consumables.txt')
     consumable = fp.readline().strip('\n').split('-')
@@ -54,6 +58,7 @@ def consumable_gen():
     return consumable
 
 def enemy_gen(en_type = 'Enemy'):
+    """Generates an enemy name by enemy type. Default enemy type is enemy, can also be Boss"""
     from random import randint
     enemy_name = ''
     enemy_name += _adjective_gen(2)

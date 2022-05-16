@@ -9,7 +9,6 @@ from player import *
 from inventory import *
 from tiles import *
 from enemies import *
-from combat import *
 
 """
 
@@ -23,7 +22,7 @@ print("\nyell HELP quick instructions!")
 
 gamer = Player()
 
-mcommands = ("move", "equip", "attack", "consume", "help", 'continue', "inspect", "take", "drop", 'location') #main commands
+mcommands = ("move", "equip", "attack", "consume", "help", 'continue', "inspect", "take", "drop", 'location', 'quit') #main commands
 directions = ('n', 's', 'w', 'e')
 
 helpmsg = '''
@@ -78,6 +77,10 @@ while True:
 
     action = input("\nWhat would you like to do? ").strip().lower()
     action_s = action.split()
+
+    if action_s[0] == 'quit':
+        print('Thanks for playing!')
+        break
 
     if action_s[0] not in mcommands:
         print("Invalid command")
@@ -216,7 +219,7 @@ while True:
             if enemy.is_dead():
                 if enemy.en_type == 'Boss':
                     level.boss_slayed = True
-                    print('You killed the level boss!')
+                    print('You killed the level boss! Enter "continue" at any time to go to the next stage!')
                 else:
                     print("You killed the enemy!")
                 if enemy.loot:
