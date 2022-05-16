@@ -80,13 +80,6 @@ class Inventory(object):
 
     def drop(self, itemname, tile):
         tile.loot += [(self.backpack.remove_item(itemname))]
-    
-    def openSlots(self):
-        opnslots = self.backpack.size - len(self.backpack.binventory)
-        if opnslots > 0:
-            return opnslots
-        else:
-            return 0
 
     def weapon_damage(self):
         damage = 0

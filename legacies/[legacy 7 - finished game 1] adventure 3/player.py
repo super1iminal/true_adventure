@@ -85,4 +85,4 @@ class Player(object):
         return str(self.name)
 
     def __str__(self):
-        return '| {} | Level: {} | MHealth: {} | CHealth: {} | Damage: {} | Resistance: {} | Open Backpack Slots: {} |'.format(self.name, self.level, self.maxhealth, self.health, self.showDamage(), self.showResistance(), self.inventory.openSlots())
+        return '| {} | Level: {} | MHealth: {} | CHealth: {} | Damage: {} | Resistance: {}'.format(self.name, self.level, self.maxhealth, self.health, self.showDamage(), self.showResistance())
