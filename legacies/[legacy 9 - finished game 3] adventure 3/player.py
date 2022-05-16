@@ -23,8 +23,8 @@ class Player(object):
 
     def xpIncrease(self, xp):
         """Increases the player's experience points and levels the player up if they've reached enough experience"""
-        prevlevel = self.level
         self.xp += xp
+        prevlevel = self.level
         self.level = xp//20
         if self.level > prevlevel:
             print("You levelled up! Level: {}. Health restored.".format(self.level))

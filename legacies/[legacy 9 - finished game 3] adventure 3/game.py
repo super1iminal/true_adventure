@@ -78,9 +78,6 @@ while True:
     action = input("\nWhat would you like to do? ").strip().lower()
     action_s = action.split()
 
-    if len(action) == 0:
-        action_s = ['quit']
-
     if action_s[0] == 'quit':
         print('Thanks for playing!')
         break
@@ -203,9 +200,6 @@ while True:
         for enemy_instance in current_tile.enemies:
             enemies_d[(enemy_instance.showName()).lower()] = enemy_instance
             enemies_l.append(enemy_instance.showName())
-        if len(enemies_l) == 0:
-            print('No enemies available to fight right now.')
-            continue
         if len(action_s)==1:
             en_choice = input('What enemy would you like to fight?: ' + str(list(enemies_l)) + "\n").strip().lower()
         else:
