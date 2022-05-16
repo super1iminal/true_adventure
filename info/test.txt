@@ -1,3 +1,0 @@
-Playing our text based game is simple and effiecnt. The player has a given list of set commands  to respond and advance through
-its environment. The player will be prompted with available loot, enemies and pathways. The player can attack, move, equip and 
-loot.

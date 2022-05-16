@@ -1,3 +1,10 @@
+"""
+Panagiotis Torabi , Asher Arya, Hien Minh Le
+Friday , May 13
+R. Vincent , instructor
+Final Project
+"""
+
 def _adjective_gen(n_adjectives = 2):
     from random import randint
     adjectives = ''
