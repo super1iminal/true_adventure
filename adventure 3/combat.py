@@ -1,3 +1,10 @@
+"""
+Panagiotis Torabi , Asher Arya, Hien Minh Le
+Friday , May 13
+R. Vincent , instructor
+Final Project
+"""
+
 from player import *
 from enemies import *
 

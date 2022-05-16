@@ -1,3 +1,10 @@
+"""
+Panagiotis Torabi , Asher Arya, Hien Minh Le
+Friday , May 13
+R. Vincent , instructor
+Final Project
+"""
+
 def weaponMaker(stage):
     from name_gen import weapon_gen
     return Weapon(itemname = weapon_gen(), stage = stage)

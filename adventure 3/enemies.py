@@ -1,3 +1,11 @@
+"""
+Panagiotis Torabi , Asher Arya, Hien Minh Le
+Friday , May 13
+R. Vincent , instructor
+Final Project
+"""
+
+
 def enemyMaker(stage, en_type = 'Enemy'):
     """Boss or Enemy. Default is enemy"""
     from name_gen import enemy_gen

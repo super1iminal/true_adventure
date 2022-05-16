@@ -1,3 +1,9 @@
+"""
+Panagiotis Torabi , Asher Arya, Hien Minh Le
+Friday , May 13
+R. Vincent , instructor
+Final Project
+"""
 from items import *
 
 class Inventory(object):
