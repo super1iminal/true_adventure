@@ -22,12 +22,12 @@ class Inventory(object):
                 print(self.showWeapons())
                 choice = input('What hand would you like to equip the weapon in? (right/left): ').strip().lower()
                 if choice == 'right':
-                    self.backpack.add_item(self.equipped[item.itemtype]['RHand'])
                     ('{} put in backpack and {} equipped in right hand'.format(self.equipped['Weapons']['RHand'].name, item.name))
+                    self.backpack.add_item(self.equipped[item.itemtype]['RHand'])
                     self.equipped[item.itemtype]['RHand'] = item
                 if choice == 'left':
-                    self.backpack.add_item(self.equipped[item.itemtype]['LHand'])
                     ('{} put in backpack and {} equipped in left hand'.format(self.equipped['Weapons']['LHand'].name, item.name))
+                    self.backpack.add_item(self.equipped[item.itemtype]['LHand'])
                     self.equipped[item.itemtype]['LHand'] = item
                 else:
                     print('invalid choice')
@@ -41,9 +41,9 @@ class Inventory(object):
 
         if item.itemtype == 'Armor':
             if self.equipped[item.itemtype][item.equipslot] != None:
+                print('{} put in backpack and {} equipped on {}'.format(self.equipped[item.itemtype][item.equipslot].name, item.name, item.equipslot))
                 self.backpack.add_item(self.equipped[item.itemtype][item.equipslot])
                 self.equipped[item.itemtype][item.equipslot] = item
-                print('{} put in backpack and {} equipped on {}'.format(self.equipped[item.itemtype][item.equipslot].name, item.name, item.equipslot))
             else:
                 self.equipped[item.itemtype][item.equipslot] = item
                 print('{} equipped on {}'.format(item.name, item.equipslot))
